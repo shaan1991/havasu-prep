@@ -1,7 +1,7 @@
 /* Havasu Prep — data layer.
    SQLite (node:sqlite, zero native deps) for local dev.
-   Neon Postgres when DATABASE_URL is set (Render free tier has no persistent disk,
-   so the hosted copy keeps its data in Postgres instead of the SQLite file). */
+   Neon Postgres when DATABASE_URL is set (serverless hosts have no persistent
+   disk, so the hosted copy keeps its data in Postgres instead of the SQLite file). */
 'use strict';
 const fs = require('node:fs');
 const path = require('node:path');
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS notes (
 `;
 
 let sqliteDb = null;
-let pgSql = null;
+let pgClient = null;
 
 /* rewrite ? placeholders to $1, $2 for Postgres */
 function toPg(text) {
@@ -147,9 +147,13 @@ function toPg(text) {
 
 async function initDb() {
   if (usePg) {
-    const { neon } = require('@neondatabase/serverless');
-    pgSql = neon(DATABASE_URL);
-    await pgSql(PG_SCHEMA);
+    /* Client (node-postgres style) instead of the neon() http helper:
+       the helper only works as a tagged template, while this codebase
+       issues dynamic query(text, params) calls everywhere. */
+    const { Client } = require('@neondatabase/serverless');
+    pgClient = new Client(DATABASE_URL);
+    await pgClient.connect();
+    await pgClient.query(PG_SCHEMA);
     console.log('Havasu Prep using Postgres (Neon)');
   } else {
     const { DatabaseSync } = require('node:sqlite');
@@ -164,8 +168,8 @@ async function initDb() {
 async function get(text, params) {
   params = params || [];
   if (usePg) {
-    const rows = await pgSql(toPg(text), params);
-    return rows[0] || null;
+    const r = await pgClient.query(toPg(text), params);
+    return r.rows[0] || null;
   }
   return sqliteDb.prepare(text).get(...params) || null;
 }
@@ -173,7 +177,10 @@ async function get(text, params) {
 /* array of rows */
 async function all(text, params) {
   params = params || [];
-  if (usePg) return await pgSql(toPg(text), params);
+  if (usePg) {
+    const r = await pgClient.query(toPg(text), params);
+    return r.rows;
+  }
   return sqliteDb.prepare(text).all(...params);
 }
 
@@ -182,10 +189,10 @@ async function run(text, params) {
   params = params || [];
   if (usePg) {
     if (/^\s*insert/i.test(text)) {
-      const rows = await pgSql(toPg(text) + ' RETURNING id', params);
-      return { lastInsertRowid: rows[0].id };
+      const r = await pgClient.query(toPg(text) + ' RETURNING id', params);
+      return { lastInsertRowid: r.rows[0].id };
     }
-    await pgSql(toPg(text), params);
+    await pgClient.query(toPg(text), params);
     return { lastInsertRowid: null };
   }
   return sqliteDb.prepare(text).run(...params);

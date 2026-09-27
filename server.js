@@ -273,12 +273,18 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong' });
 });
 
-/* boot: listen when run directly (node server.js); on serverless hosts
-   (Vercel) the platform requires this file instead, so export the app */
+/* boot: listen when run directly (node server.js). On serverless hosts the
+   platform loads this file (or api/index.js, which requires it), so the module
+   itself is a request handler: it waits for DB init, then runs Express.
+   Exporting the handler directly keeps Vercel's loader happy no matter which
+   file it treats as the function entry. */
 const ready = initDb();
 if (require.main === module) {
   ready
     .then(() => app.listen(PORT, () => console.log('Havasu Prep on ' + APP_URL)))
     .catch((e) => { console.error('database init failed:', e.message); process.exit(1); });
 }
-module.exports = { app, ready };
+const handler = (req, res) => ready.then(() => app(req, res));
+handler.ready = ready;
+handler.app = app;
+module.exports = handler;
