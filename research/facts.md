@@ -1,0 +1,84 @@
+# Havasupai Trip Research: Verified Facts
+Researched 2026-09-26. Every fact group carries its source URL. Phone numbers were only included if found on an official or widely published page. Numbers are written with spaces only, to match the app content rule of zero dash characters.
+
+## 1. Emergency and official contact numbers
+
+* **Emergency (life threatening): dial 911.** Note cell service is unreliable on the reservation, so 911 may not connect in the canyon. Source: https://www.nps.gov/grca/planyourvisit/havasupai.htm
+* **Havasupai / BIA Police (law enforcement in Supai): (928) 448 2891.** PO Box 62, Supai AZ 86435. The Bureau of Indian Affairs is the entity charged with law enforcement on the reservation. Sources: https://www.claimspages.com/tools/police-departments/arizona/coconino/havasupai-police-dept/928-448-2891/ and https://en.wikipedia.org/wiki/Havasupai (BIA law enforcement role)
+* **Havasupai Tribal Council (general tribal business): (928) 448 2731.** PO Box 10, Supai AZ 86435. Sources: https://naair.arizona.edu/havasupai-tribe (updated October 2025) and https://www.localgovs.com/government-1312326-havasupai-tribal-council-supai-indian-reservation
+* **Havasupai Tourist Office: (928) 448 2121.** This number is published on the NPS listing data for Havasupai Falls and on Tripadvisor's Havasupai Indian Reservation listing. The tribe's own official site business listing separately shows (928) 448 2111 for the Tourist Office, so there is a small discrepancy worth flagging in the app with a note to check the reservations site. Note there is no phone based customer service for reservations; reservations support is email only: info@havasupaireservations.com. Sources: https://www.nps.gov/grca/planyourvisit/havasupai.htm and https://www.tripadvisor.ca/Attraction_Review-g31371-d209274-Reviews-Havasupai_Indian_Reservation-Supai_Arizona.html
+* **Havasupai Campground Rangers Office (in the canyon near the campground): (928) 448 2180.** Source: https://www.nps.gov/grca/planyourvisit/havasupai.htm
+* **Grand Canyon Caverns Inn (permit check in location): (928) 422 3223.** Mile Marker 115, Route 66, Peach Springs AZ 86434. Source: http://gccaverns.com/ and https://gccaverns.com/the-caverns-inn
+* **Coconino County Sheriff, non emergency: (928) 774 4523 or 1 800 338 7888.** Source: https://www.coconino.az.gov/325/Sheriffs-Office
+* **Kingman Regional Medical Center: (928) 757 2101.** 3269 Stockton Hill Rd, Kingman AZ 86409. Source: http://www.azkrmc.com/ and https://www.bbb.org/us/az/kingman/profile/hospital/kingman-regional-medical-center-1126-1000006827
+* **Flagstaff Medical Center: (928) 779 3366.** 1200 N Beaver St, Flagstaff AZ 86001. Source: https://nahealth.com/contact-us
+* **Poison Control (US national): 1 800 222 1222.** Source: national standard published by HRSA; verify at https://poison.org (not yet opened; number is the long standing US national line)
+* **Arizona road conditions: dial 511 or visit https://az511.gov.** Run by the Arizona Department of Transportation. Sources: https://azdot.gov/resources/adot-az511 and https://azdot.gov/about/transportation-safety/adot-alerts-phone-app
+* **Havasupai Tribal Cafe: (928) 448 2981.** Supai village. Source: https://theofficialhavasupaitribe.com/Supai-Store---Cafe/supai-store---cafe.html
+* **Havasupai Trading Company (village store): (928) 448 2951.** Supai village. Source: https://theofficialhavasupaitribe.com/Supai-Store---Cafe/supai-store---cafe.html
+
+Flags: could not verify a dedicated Havasupai tribal police dispatch line separate from the BIA number above. The (928) 638 7888 number seen on some blogs belongs to Grand Canyon National Park's general info line, not Havasupai, so it is excluded. Per the tribe's own FAQ, there are no public medical or health facilities in Supai Village; the IHS clinic there serves tribal members only, and injuries can take many hours or even days to be transported out.
+
+## 2. Trail facts
+
+* **Hualapai Hilltop to Supai village: 8 miles one way (13 km).** Source: https://www.nps.gov/grca/planyourvisit/havasupai.htm (updated Jan 17 2026)
+* **Supai village to campground: 2 miles one way (3 km).** Source: https://www.nps.gov/grca/planyourvisit/havasupai.htm
+* **Hualapai Hilltop to campground: 10 miles one way (16 km).** Source: https://www.nps.gov/grca/planyourvisit/havasupai.htm
+* **Campground to Mooney Falls: 0.5 miles (0.8 km).** Source: https://www.nps.gov/grca/planyourvisit/havasupai.htm
+* **Havasu Campground to top of Mooney Falls: 0.7 miles; base of Mooney Falls to Beaver Falls: 2.1 miles; Beaver Falls to the Confluence (Colorado River): 3.8 miles.** Source: https://noahlangphotography.com/blog/havasupai-trail-supai-arizona
+* **Supai village to Havasu Falls: roughly 1 mile.** Havasu Falls sits on the trail between the village and the campground, just before the campground. Source: https://justsimplywander.com/hiking-havasupai-falls/ (upper falls sit about a mile past the village on the way to the campground)
+* **Elevation: Hualapai Hilltop 5,200 feet; Supai Village 3,205 feet.** Net descent about 2,000 feet. Sources: https://havasupaireservations.com/faqs/ (elevations); commonly cited total elevation change is about 2,500 feet of descent/ascent, e.g. https://grandcanyon.com/planning/south-rim-planning/havasupai-falls-arizona/?ref=keithandlindsey.com
+* **Typical hike times: down 4 to 5 hours, back up 5 to 7 hours.** Source: https://grandcanyon.com/planning/south-rim-planning/havasupai-falls-arizona/?ref=keithandlindsey.com
+* **Terrain profile:** the first 1.5 miles are steep rocky switchbacks dropping about 800 feet; then several miles of sandy wash; the village sits at mile 8 and the campground 2 miles beyond. Source: https://grandcanyon.com/planning/south-rim-planning/havasupai-falls-arizona/?ref=keithandlindsey.com
+
+## 3. Permit system (2026 season)
+
+* **Book only at https://www.havasupaireservations.com/.** An account with Havasupai Reservations is required to create a 2026 campground or lodge reservation. No day hiking is allowed. Sources: https://www.nps.gov/grca/planyourvisit/havasupai.htm and https://havasupaireservations.com/faqs/
+* **Check in location: Grand Canyon Caverns Inn, Mile Marker 115, Route 66 near Peach Springs AZ 86434.** Everyone (campground and lodge) checks in here. The trip leader or one of up to two Potential Alternate Trip Leaders (PATLs) named at booking must check in with valid photo ID; otherwise the booking is not honored. They pick up wristbands and tags for the whole group; every visitor must wear a wristband the entire time. PATLs cannot be named or changed after booking. Sources: https://havasupaireservations.com/faqs/ and https://justsimplywander.com/hiking-havasupai-falls/
+* **Check in hours vary month to month; typical window is 8 AM to 5 PM, and in summer months the Tribe has run 6 AM to 6 PM.** You can check in the day before your hike or the morning of, and you may not start the hike until checked in. The Tribe emails updated hours before each trip. Sources: https://justsimplywander.com/hiking-havasupai-falls/ and https://www.findglocal.com/XX/Unknown/106353698989894/Havasupai-Tribe-Tourism (Tribe Tourism posts: check in hours for July and August 2026 were 6 AM to 6 PM)
+* **2026 prices: campground permit $455 per person for 3 nights; lodge $2,277 per room for 3 nights (up to 4 people).** All bookings are 4 days / 3 nights only, no more and no less. The price includes all necessary permits, fees, and taxes. Sources: https://havasupaireservations.com/faqs/ and https://www.twowanderingsoles.com/blog/havasu-falls-permit
+* **Early access 2026: Jan 21 at 8 AM to Jan 31 at 5 PM Arizona time, with an extra $40 per person for campground or $160 per lodge room.** Regular public sale began Feb 1 at 8 AM Arizona time. The lottery system was discontinued for 2026. Sources: https://www.nps.gov/grca/planyourvisit/havasupai.htm and https://www.twowanderingsoles.com/blog/havasu-falls-permit
+* **Cancellation: 50 percent refund if cancelled at least 90 days before the first day of the booking (excludes early access fee).** Cancellations within 90 days get no refund. Cancel via the tourist account or by emailing info@havasupaireservations.com. Source: https://havasupaireservations.com/faqs/
+* **Transfers and resales are strictly prohibited in 2026; the transfer board was discontinued.** Public buying or selling of bookings can lead to cancellation with no refund and a permanent ban. Source: https://havasupaireservations.com/faqs/
+* **Children 6 years old and younger do not require a paid permit; children 7 and older require a paid permit.** The Tribe does not recommend bringing young children. Source: https://havasupaireservations.com/faqs/
+* **What to bring to check in: government photo ID and the license plate number of the vehicle parked at Hilltop (needed for the parking pass).** Print the campground reservation confirmation to display on the car dashboard. Sources: https://havasupaireservations.com/faqs/ and https://justsimplywander.com/hiking-havasupai-falls/
+
+## 4. Campground and village rules
+
+* **No alcohol or drugs anywhere on the reservation, including the Hilltop Trailhead parking area.** Possession, use, distribution, consumption, or sale is strictly prohibited; the reservation is a dry reservation. Source: https://havasupaireservations.com/faqs/
+* **No drones or any aerial photography/video.** Photography and video are allowed for personal use only; no photos, videos, or recordings of tribal members, homes, buildings, burial grounds, or sacred sites; no commercial filming of any kind. Source: https://havasupaireservations.com/faqs/
+* **No pets, service animals, or privately owned horses anywhere on the reservation, including trail, campground, lodge, and village.** Source: https://havasupaireservations.com/faqs/
+* **Pack out ALL trash.** If you bring it in, you carry it out to the trailhead, including partially used fuel canisters and camping gear. Source: https://havasupaireservations.com/faqs/
+* **No campfires or any other fires.** The tribe's entrance terms state visitors will not have a campfire or any other fire. Source: the tribe's Special Events Entrance Permit general information guide, published at https://yavapai-apache.org/wp-content/uploads/2026/05/Camping-map-2026-Supai-003.pdf (the entrance form each group signs)
+* **Pack mules: $400 round trip per mule.** Must be requested online at least 72 hours before arrival. One mule carries up to 4 bags; 32 lbs max per bag; max size 36 in long x 19 in wide x 19 in tall; soft sided only with nothing hanging off; coolers not permitted. Inbound drop off 4 AM to 9 AM at Hilltop (bags arrive 2 to 5 PM); outbound drop off by 6 AM. Source: https://havasupaireservations.com/faqs/
+* **Helicopter: $300 one way per person, all taxes and fees included.** Payment by credit card or cash at the landing zones at Hilltop and Supai Village. No pre booking; first come first served; tribal members get priority. One personal pack per flight; extra packs cost more. Current schedule is Sunday, Monday, Thursday, and Friday, but it can change without notice and may be unavailable to tourists. Do not rely on it. Source: https://havasupaireservations.com/faqs/
+* **Store and cafe in Supai Village have inconsistent hours; pack all the food you need for the entire trip.** The Tribal Cafe serves breakfast and lunch (burgers, fries, Navajo tacos); the Sinyella store is a small convenience style market that accepts cards with a $10 minimum. Supply deliveries arrive by mule or helicopter, so closures happen. Sources: https://havasupaireservations.com/faqs/ (official FAQ does not publish hours, recommends self sufficiency) and https://justsimplywander.com/hiking-havasupai-falls/
+* **Food storage: use a bear canister or odor proof bags.** No bears, but mice and squirrels will chew through packs and tents to reach food and trash. Source: https://havasupaireservations.com/faqs/
+* **Do not dive or jump from the falls, and do not climb the walls or the falls.** Anyone caught jumping off Havasu Falls or Mooney Falls faces a $5,000 fine, a 10 year ban from the reservation, immediate removal, and responsibility for all rescue costs. Source: https://www.findglocal.com/XX/Unknown/106353698989894/Havasupai-Tribe-Tourism (Tribe Tourism notice, May 2026)
+* **Violations can result in immediate termination of all permits, fines, exclusion, seizure of property, and tribal court prosecution, with no refunds.** Source: https://havasupaireservations.com/faqs/
+
+## 5. Flash flood safety
+
+* **Monsoon season is usually July through September, with increased chance of rain and flash flooding.** Source: https://havasupaireservations.com/faqs/
+* **Flood history: significant flood damage occurred in 2018, 2019, 2022, and 2024.** Some areas of Havasu Canyon remain off limits due to repair work or unstable ground. The canyon can be closed immediately at any given time. Source: https://www.nps.gov/grca/planyourvisit/havasupai.htm
+* **What to do: if you hear or see flood waters approaching, or if you are caught in a rainstorm, get to high ground immediately and wait until it clears. Do NOT hike past the top of Mooney Falls or enter narrow parts of the canyon when it is raining or flooding.** Source: https://havasupaireservations.com/faqs/
+* **Where closure alerts are posted: the official tribal site https://theofficialhavasupaitribe.com/ and the Havasupai Tribe Tourism Facebook page.** The Tribe posted same day weather alerts there during 2026 (e.g. a severe rain storm alert on Aug 14 2026 advising campers to get to high ground if flooding occurs). Source: https://www.findglocal.com/XX/Unknown/106353698989894/Havasupai-Tribe-Tourism
+* **NPS summer heat warning: during summer months temperatures can reach 115 degrees and trails into Supai are closed when the temperature exceeds 115 degrees.** Source: https://www.nps.gov/grca/planyourvisit/havasupai.htm
+
+## 6. Practical
+
+* **Best months:** the Tribe's official FAQ says the cooler months of the year are ideal for hiking and exploring; the warmer months are ideal for being in the water (but plan hikes for early morning). Peak tourist season is May through September, when temperatures can top 100 degrees and drop into the 50s at night. Shoulder months can be cold and may even snow. Source: https://havasupaireservations.com/faqs/
+* **Water temperature: approximately 70 degrees all year long.** Source: https://havasupaireservations.com/faqs/
+* **Drinking water:** there is drinking water available in Supai Village and from a freshwater spring in the campground. There is no water on the trail between the trailhead and the village, so carry what you need for the hike in. All other water should be treated or filtered before use; the Tribe recommends filtering all water to be extra safe. Source: https://havasupaireservations.com/faqs/
+* **Cell service:** the majority of the reservation is remote without reliable wifi or cellular reception, including most trails, the campground, and the lodge areas. Do not expect service during the visit. Source: https://havasupaireservations.com/faqs/
+* **Nearest gas stations: nearly 70 to 90 miles from the trailhead, in Peach Springs (toward Las Vegas) and in Seligman (toward Phoenix).** Have enough fuel for at least 200 miles of driving before starting down Indian Road 18. There are no fuel services at the Grand Canyon Caverns check in office, and no services at all at Hualapai Hilltop. Source: https://havasupaireservations.com/faqs/
+* **Getting to the trailhead:** after check in at Grand Canyon Caverns Inn, drive to Hualapai Hilltop at the end of Indian Road 18, about 60 miles from the Route 66 turnoff (about 5 miles west of the Inn). The road is paved but is open range with animals crossing; allow at least 1.5 hours. Park only in the tourist/visitor lot or along the road; the tribal member lot near the helipad is off limits and violators are towed. Sources: https://havasupaireservations.com/faqs/ and https://www.nps.gov/grca/planyourvisit/havasupai.htm
+* **No sleeping in cars at the trailhead.** Source: https://justsimplywander.com/hiking-havasupai-falls/
+* **Restrooms exist at the Hilltop trailhead and in the village/campground areas; there are no other facilities for the first 8 miles.** Source: https://justsimplywander.com/hiking-havasupai-falls/
+
+## Flags (could not verify)
+
+* Exact check in office hours for October 2026 (hours vary month to month; the Tribe emails them before each trip).
+* Current cafe and store operating hours for a given week (listings conflict and the Tribe itself advises not to rely on them).
+* A dedicated Havasupai tribal police dispatch line separate from the BIA number listed above.
+* Exact current helicopter schedule beyond Sunday/Monday/Thursday/Friday (the Tribe states it can change without notice).

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Havasu Prep</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23f0e9d8'/><path d='M6 24 13 10l4 7 3-4 6 11z' fill='%230c0c0c'/></svg>">
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="loader" id="loader">
+  <div class="loader-cube"><i></i><i></i><i></i></div>
+  <div class="loader-txt">Havasu Prep</div>
+</div>
+<div id="app-root" hidden>
+  <nav id="rail" aria-label="Primary"></nav>
+  <div id="shell"><main id="panel"></main></div>
+  <nav id="tabbar" aria-label="Primary"></nav>
+  <div id="menu-pop" hidden>
+    <div class="mob-backdrop" data-act="menu"></div>
+    <div class="mob-menu"></div>
+  </div>
+</div>
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+<script src="/js/core.js"></script>
+<script src="/js/home.js"></script>
+<script src="/js/quiz.js"></script>
+<script src="/js/train.js"></script>
+<script src="/js/pack.js"></script>
+<script src="/js/notes.js"></script>
+<script src="/js/guide.js"></script>
+<script src="/js/settings.js"></script>
+<script>
+  boot();
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Havasu Prep — Train for Havasupai</title>
+<meta name="description" content="Training plans, packing checklists, and trip intel for Havasupai hikers.">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23f0e9d8'/><path d='M6 24 13 10l4 7 3-4 6 11z' fill='%230c0c0c'/></svg>">
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="land">
+  <nav class="land-nav">
+    <div class="land-brand">
+      <span class="mark"><svg viewBox="0 0 32 32" fill="none"><path d="M4 25 12 9l5 8 3.5-4.5L28 25z" fill="#0c0c0c"/></svg></span>
+      Havasu Prep
+    </div>
+    <a class="btn-ghost btn-sm" href="/auth/google" id="nav-signin">Sign in</a>
+  </nav>
+
+  <div id="land-err"></div>
+
+  <header class="land-hero">
+    <div class="land-kicker">A trip planner for Havasupai hikers</div>
+    <h1 class="land-title">Walk into the canyon <em>ready</em>, walk out grinning.</h1>
+    <p class="land-sub">Havasupai is ten miles each way with a full pack, desert heat, and no room for guessing. Havasu Prep builds you a training plan matched to your fitness, tracks every session, keeps your packing list honest, and puts permits, rules, and emergency numbers one tap away.</p>
+    <div class="land-cta">
+      <a class="g-btn" href="/auth/google">
+        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.5 12.3c0-.9-.1-1.5-.3-2.3H12v4.5h6.5c-.1 1.1-.8 2.7-2.4 3.8l-.1.7 3.5 2.7.2.1c2.2-2 3.6-5 3.6-9.5z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.8-2.9c-1 .7-2.4 1.2-4.1 1.2-3.1 0-5.8-2.1-6.8-5l-.7.1-3.6 2.8v.7C2.9 21.6 7.1 24 12 24z"/><path fill="#FBBC05" d="M5.2 14.4c-.2-.7-.4-1.5-.4-2.4s.1-1.7.4-2.4l-.1-.7-3.5-2.7-.5.2C.4 8 0 9.9 0 12s.4 4 1.1 5.6l4.1-3.2z"/><path fill="#EA4335" d="M12 4.7c1.8 0 3 .8 3.7 1.4l3.3-3.2C17.9 1.1 15.2 0 12 0 7.1 0 2.9 2.4 1.1 6.4l4.1 3.2c1-2.8 3.7-4.9 6.8-4.9z"/></svg>
+        Continue with Google
+      </a>
+      <button class="btn-ghost" id="dev-btn" hidden>Continue as test hiker</button>
+    </div>
+    <div class="land-note">Free to use. Your training data belongs to you.</div>
+  </header>
+
+  <section class="land-grid">
+    <div class="land-card">
+      <div class="land-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 9 9l4 7 3-4 5 8z"/><circle cx="18" cy="5" r="2"/></svg></div>
+      <h3>A plan that meets you where you are</h3>
+      <p>Answer six quick questions about your activity level and trip date. Get a week by week training plan with walk, hike, strength, and long hike days that ramp up and taper right.</p>
+    </div>
+    <div class="land-card">
+      <div class="land-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4-4 6-4 11a4 4 0 0 0 8 0c0-2-1-3-1-3s3 1 3 5a6 6 0 0 1-12 0C6 8 12 6 12 2z"/></svg></div>
+      <h3>Training you can actually track</h3>
+      <p>Check off each session, log miles and minutes, watch your streak and weekly completion climb. Every workout is one tap, built for tired thumbs after a long hike.</p>
+    </div>
+    <div class="land-card">
+      <div class="land-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 12.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></div>
+      <h3>A packing list that starts smart</h3>
+      <p>Begin with a field tested base list covering permits, water, camp, food, clothing, and safety. Check items off, add your own, remove what you do not need.</p>
+    </div>
+    <div class="land-card">
+      <div class="land-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+      <h3>Trail intel and emergency numbers</h3>
+      <p>Distances, permit check in, campground rules, flash flood safety, and the numbers that matter: tribal police, the tourist office, the inn, and the nearest hospitals.</p>
+    </div>
+    <div class="land-card">
+      <div class="land-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+      <h3>Notes for the details</h3>
+      <p>Flight times, rental car confirmations, the fry bread stand hours, that thing your friend said about Mooney Falls. Pin the important ones to the top.</p>
+    </div>
+    <div class="land-card">
+      <div class="land-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>
+      <h3>A countdown that keeps you honest</h3>
+      <p>Set your trip date and the home screen counts the days. Your current training week lines up automatically, so you always know what is on deck.</p>
+    </div>
+  </section>
+
+  <section class="land-strip">
+    <div>
+      <h2>How it works</h2>
+      <p>No app store, no account maze. It runs in your browser on any device, and your data is tied to your Google sign in.</p>
+    </div>
+    <div>
+      <div class="step-row"><div class="step-n">1</div><div><div class="step-t">Sign in with Google</div><div class="step-d">One tap. No password to remember.</div></div></div>
+      <div class="step-row"><div class="step-n">2</div><div><div class="step-t">Take the 60 second quiz</div><div class="step-d">Tell it how active you are and when you hike. It assigns your plan.</div></div></div>
+      <div class="step-row"><div class="step-n">3</div><div><div class="step-t">Train, pack, and go</div><div class="step-d">Log sessions, check off gear, read the guide. Show up ready.</div></div></div>
+    </div>
+  </section>
+
+  <footer class="land-foot">
+    Built for hikers, by a hiker.<br>
+    Havasu Prep is an independent trip planner and is not affiliated with the Havasupai Tribe.
+  </footer>
+</div>
+<div id="toast-root"></div>
+<script>
+(function(){
+  var canvas = document.getElementById('bg-canvas');
+  var ctx = canvas.getContext('2d'), W, H, orbs = [];
+  function size(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+  size(); addEventListener('resize', size);
+  for (var i = 0; i < 5; i++) orbs.push({ x: Math.random(), y: Math.random(), r: .25 + Math.random() * .3, s: .0004 + Math.random() * .0008, o: .05 + Math.random() * .06 });
+  (function draw(){
+    ctx.clearRect(0, 0, W, H);
+    var t = Date.now();
+    for (var i = 0; i < orbs.length; i++) {
+      var o = orbs[i];
+      var x = (o.x + Math.sin(t * o.s + i * 2) * .06) * W;
+      var y = (o.y + Math.cos(t * o.s * 1.3 + i) * .06) * H;
+      var r = o.r * Math.min(W, H);
+      var g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, 'rgba(250,204,21,' + o.o + ')');
+      g.addColorStop(1, 'rgba(250,204,21,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  })();
+  if (location.search.indexOf('auth=failed') > -1) {
+    document.getElementById('land-err').innerHTML = '<div class="land-err" style="max-width:560px">Google sign in did not complete. Please try again.</div>';
+  }
+  fetch('/api/config').then(function(r){ return r.json(); }).then(function(c){
+    if (c.devLogin) {
+      var b = document.getElementById('dev-btn');
+      b.hidden = false;
+      b.addEventListener('click', function(){
+        fetch('/auth/dev', { method: 'POST' }).then(function(r){ return r.json(); }).then(function(d){
+          localStorage.setItem('havasu_token', d.token);
+          location.href = '/app.html';
+        });
+      });
+    }
+    if (!c.googleOn) {
+      document.getElementById('nav-signin').style.display = 'none';
+      var g = document.querySelector('.land-cta .g-btn');
+      if (g) g.style.display = 'none';
+      var n = document.querySelector('.land-note');
+      if (n) n.textContent = 'Google sign in is being connected. The full app opens right after.';
+    }
+  }).catch(function(){});
+})();
+</script>
+</body>
+</html>
