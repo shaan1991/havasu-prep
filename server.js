@@ -334,6 +334,34 @@ api.post('/strava/dismiss', ah(async (req, res) => {
   res.json({ ok: true });
 }));
 
+/* canyon readiness: 0-100 from the last 28 days of logged training.
+   Miles base 40 (80 mi full marks), longest session 25 (10 mi full marks),
+   consistency 20 (12 sessions full marks), strength 15 (4 sessions full marks).
+   Bands: 80+ canyon ready, 60+ almost there, 40+ building, else early days. */
+function readinessOf(logs) {
+  const miles = logs.reduce((t, l) => t + (l.distance_mi || 0), 0);
+  const longest = logs.reduce((m, l) => Math.max(m, l.distance_mi || 0), 0);
+  const sessions = logs.length;
+  const strength = logs.filter((l) => l.kind === 'strength').length;
+  const score = Math.round(
+    Math.min(40, miles / 80 * 40) +
+    Math.min(25, longest / 10 * 25) +
+    Math.min(20, sessions / 12 * 20) +
+    Math.min(15, strength / 4 * 15));
+  const band = score >= 80 ? 'Canyon ready' : score >= 60 ? 'Almost there' : score >= 40 ? 'Building' : 'Early days';
+  const bandKey = score >= 80 ? 'ready' : score >= 60 ? 'almost' : score >= 40 ? 'building' : 'early';
+  return {
+    score, band, bandKey,
+    parts: { miles: Math.round(miles * 10) / 10, longest: Math.round(longest * 10) / 10, sessions, strength },
+  };
+}
+function readinessCutoff() { return new Date(Date.now() - 28 * 86400000).toISOString().slice(0, 10); }
+api.get('/readiness', ah(async (req, res) => {
+  const logs = await all('SELECT log_date, distance_mi, minutes, kind FROM training_logs WHERE user_id = ? AND log_date >= ?',
+    [req.user.id, readinessCutoff()]);
+  res.json(readinessOf(logs));
+}));
+
 /* crews: train together, capped at the tribe group size */
 function crewCode() {
   const c = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
@@ -368,15 +396,22 @@ api.post('/crews/join', ah(async (req, res) => {
 api.get('/crews', ah(async (req, res) => {
   const mine = await all('SELECT c.id, c.name, c.owner_id FROM crews c JOIN crew_members m ON m.crew_id = c.id WHERE m.user_id = ? ORDER BY c.created_at', [req.user.id]);
   const ws = weekStartISO();
+  const cutoff = readinessCutoff();
   const out = [];
   for (const c of mine) {
     const members = await all('SELECT user_id, display_name FROM crew_members WHERE crew_id = ? ORDER BY joined_at', [c.id]);
     const rows = [];
     for (const m of members) {
       const agg = await get('SELECT COUNT(*) n, COALESCE(SUM(distance_mi),0) mi, COALESCE(SUM(minutes),0) mins FROM training_logs WHERE user_id = ? AND log_date >= ?', [m.user_id, ws]);
-      rows.push({ name: m.display_name, sessions: agg.n, miles: Math.round(agg.mi * 10) / 10, minutes: agg.mins, me: m.user_id === req.user.id });
+      const rlogs = await all('SELECT log_date, distance_mi, minutes, kind FROM training_logs WHERE user_id = ? AND log_date >= ?', [m.user_id, cutoff]);
+      const r = readinessOf(rlogs);
+      rows.push({ name: m.display_name, sessions: agg.n, miles: Math.round(agg.mi * 10) / 10, minutes: agg.mins, me: m.user_id === req.user.id, score: r.score, band: r.band, bandKey: r.bandKey });
     }
-    out.push({ id: c.id, name: c.name, code: c.id, owner: c.owner_id === req.user.id, members: rows });
+    const groupScore = rows.length ? Math.round(rows.reduce((t, m) => t + m.score, 0) / rows.length) : 0;
+    const feed = await all(`SELECT m.display_name AS name, l.title, l.distance_mi, l.minutes, l.log_date, l.kind
+      FROM training_logs l JOIN crew_members m ON m.user_id = l.user_id
+      WHERE m.crew_id = ? ORDER BY l.log_date DESC, l.id DESC LIMIT 8`, [c.id]);
+    out.push({ id: c.id, name: c.name, code: c.id, owner: c.owner_id === req.user.id, members: rows, groupScore, feed });
   }
   res.json({ crews: out, max: CREW_MAX });
 }));

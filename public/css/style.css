@@ -738,3 +738,19 @@ input,textarea,select{font-family:inherit;letter-spacing:-.025em;color:var(--fg)
 .crew-forms{display:grid;gap:8px;margin-top:12px}
 .crew-formrow{display:grid;grid-template-columns:1fr auto;gap:8px}
 .crew-code{font-family:ui-monospace,monospace;letter-spacing:.08em}
+
+/* canyon readiness + crew v2 */
+.ready-card { margin-bottom: 14px; }
+.ready-top { display: flex; align-items: baseline; gap: 10px; margin: 4px 0 10px; }
+.ready-row { margin-bottom: 8px; }
+.ready-rrow { display: flex; justify-content: space-between; margin-bottom: 3px; }
+.ready-pill { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.band-ready { background: #dcfce7; color: #166534; }
+.band-almost { background: #fef9c3; color: #854d0e; }
+.band-building { background: #dbeafe; color: #1e40af; }
+.band-early { background: #f3f4f6; color: #6b7280; }
+.grp-score { display: flex; align-items: center; gap: 12px; background: var(--bg); border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; }
+.crew-m { padding: 8px 0; border-top: 1px solid var(--line); }
+.crew-mrow { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.feed-row { padding: 7px 0; border-top: 1px solid var(--line); }
+.crew-sec-t { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--dim); }

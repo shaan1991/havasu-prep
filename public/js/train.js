@@ -13,10 +13,11 @@ RENDER.train = async function (weekArg) {
       '<div class="pg-sub">Take the 60 second quiz and your training weeks will appear here.</div></div>' +
       '<button class="btn" onclick="quizStart()">Take the quiz</button>';
   }
-  let strava = { stravaOn: false, connected: false }, crews = { crews: [], max: 12 };
-  try { const r = await api('/api/strava/status'); strava = r; } catch (e) { /* strava unavailable */ }
+  let crews = { crews: [], max: 12 }, ready = null;
   try { crews = await api('/api/crews'); } catch (e) { /* crews unavailable */ }
-  const crewHtml = buildCrewCard(strava, crews);
+  try { ready = await api('/api/readiness'); } catch (e) { /* readiness unavailable */ }
+  const crewHtml = buildCrewCard(crews);
+  const readyHtml = buildReadinessCard(ready);
   const pct = d.days.length ? Math.round(d.days.filter((x) => x.kind === 'rest' || x.logs.length > 0).length / d.days.length * 100) : 0;
   const cards = d.days.map((day, i) => {
     const done = day.logs.length > 0;
@@ -37,6 +38,7 @@ RENDER.train = async function (weekArg) {
     '<div class="pg-title">This week, on the trail to ready.</div>' +
     '<div class="pg-sub">Log each session as you finish it. Rest days count too, recovery is training.</div></div>' +
     (d.level ? '<div class="lvl-strip"><span>Training as <b>' + esc(d.level.name) + '</b></span><button class="btn-ghost btn-sm" id="train-retake" style="width:auto">Retake quiz</button></div>' : '') +
+    readyHtml +
     crewHtml +
     (d.days.some((x) => x.taper) || d.week === d.total ? '' : '') +
     '<div class="card"><div class="card-h"><span class="card-t">Week progress</span><span class="card-t">' + pct + '%</span></div>' +
@@ -122,87 +124,56 @@ function openLogModal(week, dayIdx, dayKind) {
   setTimeout(() => $('#lg-title', m).focus(), 100);
 }
 
-/* ── crew: strava sync + training crews ─────────────────────── */
-function buildCrewCard(strava, crews) {
-  let stravaSec;
-  if (!strava.stravaOn) {
-    stravaSec = '<div class="t2">Strava sync is not set up on this copy of the app yet.</div>';
-  } else if (!strava.connected) {
-    stravaSec = '<div class="t2" style="margin-bottom:10px">Pull your hikes, walks, and runs in with one tap. Your crew sees your weekly totals, never your routes.</div>' +
-      '<button class="btn btn-sm" id="strava-connect" style="width:auto">Connect Strava</button>';
-  } else {
-    stravaSec = '<div class="strava-row"><span>Connected as <b>' + esc(strava.athlete_name || 'athlete') + '</b></span>' +
-      '<span class="strava-btns"><button class="btn-ghost btn-sm" id="strava-sync" style="width:auto">Sync now</button>' +
-      '<button class="btn-ghost btn-sm" id="strava-off" style="width:auto">Disconnect</button></span></div>' +
-      '<div id="strava-new"></div>';
-  }
+/* ── readiness + crew ──────────────────────────────────────── */
+function buildReadinessCard(r) {
+  if (!r) return '';
+  const p = r.parts;
+  const bars = [
+    ['Miles, last 28 days', p.miles, 80, ' mi'],
+    ['Longest single session', p.longest, 10, ' mi'],
+    ['Sessions', p.sessions, 12, ''],
+    ['Strength sessions', p.strength, 4, ''],
+  ].map(([label, v, full, unit]) =>
+    '<div class="ready-row"><div class="ready-rrow"><span class="t2">' + esc(label) + '</span>' +
+    '<span class="t2"><b>' + esc(String(v)) + '</b>' + unit + '</span></div>' +
+    '<div class="pack-bar"><i style="width:' + Math.min(100, Math.round(v / full * 100)) + '%"></i></div></div>').join('');
+  return '<div class="card ready-card"><div class="card-h"><span class="card-t">Canyon readiness</span>' +
+    '<span class="ready-pill band-' + r.bandKey + '">' + esc(r.band) + '</span></div>' +
+    '<div class="ready-top"><div class="stat-big">' + r.score + '</div>' +
+    '<div class="count-cap">out of 100 · from your last 28 days of training</div></div>' + bars + '</div>';
+}
+
+function buildCrewCard(crews) {
   const crewCards = (crews.crews || []).map((c) => {
-    const members = c.members.map((m) => {
-      const bar = Math.min(100, Math.round(m.sessions / 5 * 100));
-      return '<div class="crew-m"><div class="crew-mrow"><span class="grow">' + esc(m.name) + (m.me ? ' <span class="t2">(you)</span>' : '') + '</span>' +
-        '<span class="t2">' + m.sessions + ' sessions · ' + esc(String(m.miles)) + ' mi</span></div>' +
-        '<div class="pack-bar"><i style="width:' + bar + '%"></i></div></div>';
-    }).join('');
+    const members = c.members.map((m) =>
+      '<div class="crew-m"><div class="crew-mrow"><span class="grow">' + esc(m.name) + (m.me ? ' <span class="t2">(you)</span>' : '') + '</span>' +
+      '<span class="ready-pill band-' + m.bandKey + '">' + m.score + '</span></div>' +
+      '<div class="t2">' + m.sessions + ' sessions · ' + esc(String(m.miles)) + ' mi this week · ' + esc(m.band) + '</div></div>').join('');
+    const feed = (c.feed || []).map((f) =>
+      '<div class="feed-row"><div class="grow"><div class="t1">' + esc(f.name) + ' logged <b>' + esc(f.title) + '</b></div>' +
+      '<div class="t2">' + esc(f.log_date) +
+      (f.distance_mi > 0 ? ' · ' + esc(String(f.distance_mi)) + ' mi' : '') +
+      (f.minutes > 0 ? ' · ' + f.minutes + ' min' : '') + '</div></div></div>').join('');
     return '<div class="crew"><div class="card-h"><span class="card-t">' + esc(c.name) + '</span>' +
       '<button class="btn-ghost btn-sm crew-code" data-copy-code="' + esc(c.code) + '" style="width:auto">Code: ' + esc(c.code) + '</button></div>' +
+      '<div class="grp-score"><div><div class="stat-big">' + c.groupScore + '</div>' +
+      '<div class="count-cap">group readiness</div></div>' +
+      '<div class="t2">' + c.members.length + ' of ' + (crews.max || 12) + ' hikers · average of the crew</div></div>' +
       members +
+      (feed ? '<div class="crew-sec-t" style="margin:10px 0 4px">Latest from the crew</div>' + feed : '') +
       '<div class="crew-foot"><button class="btn-ghost btn-sm" data-leave-crew="' + esc(c.id) + '" style="width:auto">Leave</button>' +
       (c.owner ? '<button class="btn-ghost btn-sm" data-del-crew="' + esc(c.id) + '" style="width:auto">Delete crew</button>' : '') + '</div></div>';
   }).join('');
   return '<div class="card crew-card"><div class="card-h"><span class="card-t">Crew</span><span class="card-t dim">train together</span></div>' +
-    '<div class="crew-sec"><div class="crew-sec-t">Strava sync</div>' + stravaSec + '</div>' +
-    '<div class="crew-sec"><div class="crew-sec-t">My crews <span class="t2">· max ' + (crews.max || 12) + ', the tribe limit</span></div>' +
-    (crewCards || '<div class="t2" style="margin-bottom:10px">No crew yet. Create one and share the code, or join with a code a friend sent you.</div>') +
+    '<div class="crew-sec">' +
+    (crewCards || '<div class="t2" style="margin-bottom:10px">No crew yet. Create one and share the code, or join with a code a friend sent you. Everyone logs their own sessions; the crew sees weekly totals, readiness, and the latest activity.</div>') +
     '<div class="crew-forms"><div class="crew-formrow"><input class="f-input" id="crew-name" placeholder="Crew name" maxlength="60">' +
     '<button class="btn btn-sm" id="crew-create" style="width:auto">Create</button></div>' +
     '<div class="crew-formrow"><input class="f-input" id="crew-code-in" placeholder="Invite code" maxlength="6" style="text-transform:uppercase">' +
     '<button class="btn btn-sm" id="crew-join" style="width:auto">Join</button></div></div></div></div>';
 }
 
-function renderStravaNew(acts) {
-  const box = $('#strava-new');
-  if (!box) return;
-  if (!acts.length) { box.innerHTML = '<div class="t2" style="margin-top:8px">Nothing new. You are all synced.</div>'; return; }
-  box.innerHTML = '<div class="crew-sec-t" style="margin-top:10px">New activities</div>' + acts.map((a, i) =>
-    '<div class="strava-act"><div class="grow"><div class="t1">' + esc(a.name) + '</div>' +
-    '<div class="t2">' + esc(a.log_date) + ' · ' + esc(String(a.distance_mi)) + ' mi · ' + a.minutes + ' min</div></div>' +
-    '<span class="strava-btns"><button class="btn-ghost btn-sm" data-imp-act="' + i + '" style="width:auto">Import</button>' +
-    '<button class="btn-ghost btn-sm" data-dis-act="' + i + '" style="width:auto">Skip</button></span></div>').join('');
-  box._acts = acts;
-  $$('#strava-new [data-imp-act]').forEach((b) => b.onclick = async () => {
-    const a = box._acts[+b.dataset.impAct];
-    b.disabled = true; b.textContent = 'Importing…';
-    try {
-      await api('/api/strava/import', { method: 'POST', body: { activities: [a] } });
-      toast('Session logged');
-      go('train', TRAIN_WEEK);
-    } catch (e) { toast(e.message); b.disabled = false; b.textContent = 'Import'; }
-  });
-  $$('#strava-new [data-dis-act]').forEach((b) => b.onclick = async () => {
-    const a = box._acts[+b.dataset.disAct];
-    try { await api('/api/strava/dismiss', { method: 'POST', body: { ids: [a.id] } }); } catch (e) {}
-    box._acts.splice(+b.dataset.disAct, 1);
-    renderStravaNew(box._acts);
-  });
-}
-
 function mountCrewCard() {
-  const sc = $('#strava-connect');
-  if (sc) sc.onclick = () => { location.href = '/auth/strava'; };
-  const sy = $('#strava-sync');
-  if (sy) sy.onclick = async () => {
-    sy.disabled = true; sy.textContent = 'Syncing…';
-    try {
-      const r = await api('/api/strava/activities');
-      renderStravaNew(r.activities || []);
-    } catch (e) { toast(e.message); }
-    sy.disabled = false; sy.textContent = 'Sync now';
-  };
-  const so = $('#strava-off');
-  if (so) so.onclick = () => confirmDlg('Disconnect Strava?', 'Your logged sessions stay. New activities just will not sync.', 'Disconnect', async () => {
-    await api('/api/strava/disconnect', { method: 'POST' });
-    go('train', TRAIN_WEEK);
-  });
   const cc = $('#crew-create');
   if (cc) cc.onclick = async () => {
     const name = $('#crew-name').value.trim();
