@@ -66,12 +66,14 @@ RENDER.home_mount = function () {
       '<button class="btn" id="hm-save">Save</button></div>');
     $('#hm-cancel', m).onclick = () => closeModal();
     $('#hm-save', m).onclick = async () => {
-      const v = $('#hm-date', m).value || null;
-      await api('/api/me', { method: 'PUT', body: { trip_date: v } });
-      await refreshMe();
-      closeModal(true);
-      toast('Trip date saved');
-      go('home');
+      try {
+        const v = $('#hm-date', m).value || null;
+        await api('/api/me', { method: 'PUT', body: { trip_date: v } });
+        await refreshMe();
+        closeModal(true);
+        toast('Trip date saved');
+        go('home');
+      } catch (e) { toast(e.message); }
     };
   };
 };

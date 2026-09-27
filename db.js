@@ -189,8 +189,9 @@ async function run(text, params) {
   params = params || [];
   if (usePg) {
     if (/^\s*insert/i.test(text)) {
-      const r = await pgClient.query(toPg(text) + ' RETURNING id', params);
-      return { lastInsertRowid: r.rows[0].id };
+      const r = await pgClient.query(toPg(text) + ' RETURNING *', params);
+      const row = r.rows[0] || {};
+      return { lastInsertRowid: row.id === undefined ? null : row.id };
     }
     await pgClient.query(toPg(text), params);
     return { lastInsertRowid: null };
