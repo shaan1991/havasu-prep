@@ -100,7 +100,9 @@ input,textarea,select{font-family:inherit;letter-spacing:-.025em;color:var(--fg)
 .btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:transparent;color:var(--fg);font-weight:600;font-size:14px;border-radius:14px;padding:12px 18px;border:1px solid var(--border);transition:background .2s,transform .15s}
 .btn-ghost:hover{background:var(--glow-bg)}
 .btn-ghost:active{transform:scale(.97)}
-.btn-sm{padding:9px 14px;font-size:13px;border-radius:12px;width:auto}
+.btn-sm{padding:9px 14px;font-size:13px;border-radius:12px;width:auto;white-space:nowrap}
+.btn svg,.btn-ghost svg{width:18px;height:18px;flex-shrink:0}
+.empty-cta svg{width:22px;height:22px}
 .btn-danger{background:transparent;color:var(--sc-bad);border:1px solid var(--sc-bad)}
 .btn-row{display:flex;gap:10px}
 .btn-row .btn,.btn-row .btn-ghost{flex:1}
