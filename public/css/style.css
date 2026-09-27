@@ -724,6 +724,7 @@ input,textarea,select{font-family:inherit;letter-spacing:-.025em;color:var(--fg)
 
 /* ── Train: crew card ──────────────────────────────────────── */
 .crew-card{padding:0}
+.crew-card>.card-h{padding:20px 22px 0;margin-bottom:0}
 .crew-sec{padding:14px 18px;border-top:1px solid var(--line)}
 .crew-sec:first-of-type{border-top:0}
 .crew-sec-t{font-size:14px;font-weight:700;margin-bottom:8px}
@@ -736,7 +737,8 @@ input,textarea,select{font-family:inherit;letter-spacing:-.025em;color:var(--fg)
 .crew-mrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;font-size:14px}
 .crew-foot{display:flex;gap:8px;margin-top:6px}
 .crew-forms{display:grid;gap:8px;margin-top:12px}
-.crew-formrow{display:grid;grid-template-columns:1fr auto;gap:8px}
+.crew-formrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.crew-formrow .f-input{margin-bottom:0}
 .crew-code{font-family:ui-monospace,monospace;letter-spacing:.08em}
 
 /* canyon readiness + crew v2 */

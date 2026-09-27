@@ -158,7 +158,7 @@ function buildCrewCard(crews) {
       '<button class="btn-ghost btn-sm crew-code" data-copy-code="' + esc(c.code) + '" style="width:auto">Code: ' + esc(c.code) + '</button></div>' +
       '<div class="grp-score"><div><div class="stat-big">' + c.groupScore + '</div>' +
       '<div class="count-cap">group readiness</div></div>' +
-      '<div class="t2">' + c.members.length + ' of ' + (crews.max || 12) + ' hikers · average of the crew</div></div>' +
+      '<div class="t2">' + c.members.length + ' of ' + (crews.max || 12) + ' hikers · crew average</div></div>' +
       members +
       (feed ? '<div class="crew-sec-t" style="margin:10px 0 4px">Latest from the crew</div>' + feed : '') +
       '<div class="crew-foot"><button class="btn-ghost btn-sm" data-leave-crew="' + esc(c.id) + '" style="width:auto">Leave</button>' +
