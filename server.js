@@ -149,6 +149,85 @@ api.get('/plan', ah(async (req, res) => {
   res.json({ level: LEVELS[p.level], weeks: p.weeks, injury: p.injury_note, trip_date: p.trip_date, plan: buildPlan(p.level, p.weeks) });
 }));
 
+/* ── intel: live canyon conditions (weather, alerts, news) ── */
+const SUPAI = { lat: 36.2369, lon: -112.6903 };
+const INTEL_TTL = 20 * 60 * 1000;
+let intelCache = { at: 0, data: null };
+const WMO_LABEL = { 0: 'Clear sky', 1: 'Mostly clear', 2: 'Partly cloudy', 3: 'Overcast', 45: 'Fog', 48: 'Icy fog', 51: 'Light drizzle', 53: 'Drizzle', 55: 'Heavy drizzle', 56: 'Freezing drizzle', 57: 'Freezing drizzle', 61: 'Light rain', 63: 'Rain', 65: 'Heavy rain', 66: 'Freezing rain', 67: 'Freezing rain', 71: 'Light snow', 73: 'Snow', 75: 'Heavy snow', 77: 'Snow grains', 80: 'Light showers', 81: 'Showers', 82: 'Heavy showers', 85: 'Light snow showers', 86: 'Snow showers', 95: 'Thunderstorm', 96: 'Storm with hail', 99: 'Storm with hail' };
+async function fetchTimeout(url, opts, ms) {
+  const c = new AbortController();
+  const t = setTimeout(() => c.abort(), ms || 12000);
+  try { return await fetch(url, Object.assign({}, opts, { signal: c.signal })); }
+  finally { clearTimeout(t); }
+}
+async function intelWeather() {
+  const u = 'https://api.open-meteo.com/v1/forecast?latitude=' + SUPAI.lat + '&longitude=' + SUPAI.lon +
+    '&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m' +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+    '&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FPhoenix&forecast_days=7';
+  const j = await (await fetchTimeout(u)).json();
+  const days = (j.daily.time || []).map((t, i) => ({
+    date: t,
+    hi: Math.round(j.daily.temperature_2m_max[i]),
+    lo: Math.round(j.daily.temperature_2m_min[i]),
+    precip: j.daily.precipitation_probability_max[i],
+    label: WMO_LABEL[j.daily.weather_code[i]] || '—',
+  }));
+  return {
+    temp: Math.round(j.current.temperature_2m),
+    label: WMO_LABEL[j.current.weather_code] || '—',
+    humidity: j.current.relative_humidity_2m,
+    wind_mph: Math.round(j.current.wind_speed_10m),
+    days,
+  };
+}
+async function intelAlerts() {
+  const j = await (await fetchTimeout('https://api.weather.gov/alerts/active?point=' + SUPAI.lat + ',' + SUPAI.lon,
+    { headers: { 'User-Agent': 'havasu-prep/1.0' } })).json();
+  return (j.features || []).map((f) => {
+    const p = f.properties || {};
+    return {
+      event: p.event || 'Alert',
+      headline: p.headline || '',
+      severity: p.severity || 'Unknown',
+      effective: p.effective || null,
+      expires: p.expires || null,
+      areas: p.areaDesc || '',
+    };
+  });
+}
+function parseNewsRss(xml) {
+  const items = [];
+  const re = /<item>([\s\S]*?)<\/item>/g;
+  let m;
+  const clean = (x) => String(x || '').replace(/<!\[CDATA\[|\]\]>/g, '').trim();
+  const tag = (b, t) => { const mm = b.match(new RegExp('<' + t + '>([\\s\\S]*?)</' + t + '>')); return mm ? mm[1] : ''; };
+  while ((m = re.exec(xml)) && items.length < 12) {
+    const b = m[1];
+    let title = clean(tag(b, 'title'));
+    let source = clean(tag(b, 'source'));
+    const dm = title.match(/ - ([^-]+)$/);
+    if (dm) { if (!source) source = dm[1].trim(); title = title.slice(0, dm.index).trim(); }
+    items.push({ title, link: clean(tag(b, 'link')), source, published: clean(tag(b, 'pubDate')) });
+  }
+  return items.filter((x) => x.title && x.link);
+}
+async function intelNews() {
+  const r = await fetchTimeout('https://news.google.com/rss/search?q=havasupai%20OR%20%22havasu%20falls%22&hl=en-US&gl=US&ceid=US:en');
+  return parseNewsRss(await r.text());
+}
+api.get('/intel', ah(async (req, res) => {
+  const now = Date.now();
+  if (req.query.fresh !== '1' && intelCache.data && now - intelCache.at < INTEL_TTL) return res.json(intelCache.data);
+  const out = { updated_at: new Date().toISOString(), weather: null, alerts: [], news: [], errors: {} };
+  const [w, a, n] = await Promise.allSettled([intelWeather(), intelAlerts(), intelNews()]);
+  if (w.status === 'fulfilled') out.weather = w.value; else out.errors.weather = true;
+  if (a.status === 'fulfilled') out.alerts = a.value; else out.errors.alerts = true;
+  if (n.status === 'fulfilled') out.news = n.value; else out.errors.news = true;
+  intelCache = { at: now, data: out };
+  res.json(out);
+}));
+
 /* training */
 api.get('/training/week', ah(async (req, res) => {
   const p = await getProfile(req.user.id);
@@ -159,7 +238,7 @@ api.get('/training/week', ah(async (req, res) => {
   const logs = await all('SELECT * FROM training_logs WHERE user_id = ? AND week_index = ?', [req.user.id, w]);
   const byDay = {};
   for (const l of logs) { (byDay[l.day_index] = byDay[l.day_index] || []).push(l); }
-  res.json({ week: w, total: plan.weeks.length, days: wk.days.map((d, i) => ({ ...d, logs: byDay[i] || [] })) });
+  res.json({ week: w, total: plan.weeks.length, level: LEVELS[p.level], days: wk.days.map((d, i) => ({ ...d, logs: byDay[i] || [] })) });
 }));
 api.post('/training/log', ah(async (req, res) => {
   const b = req.body || {};

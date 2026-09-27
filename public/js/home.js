@@ -38,7 +38,7 @@ RENDER.home = async function () {
       '<div><div style="font-size:15px;font-weight:700">' + d.weekDone + ' of ' + d.weekTotal + ' days on track</div>' +
       '<div class="day-detail">Streak: <b style="color:var(--sc-mid)">' + d.streak + ' day' + (d.streak === 1 ? '' : 's') + '</b> ' + IC.flame.replace('<svg', '<svg width="14" height="14" style="vertical-align:-2px"') + '</div>' +
       '<div class="day-detail">' + esc(String(d.totalMi)) + ' miles · ' + d.totalSessions + ' sessions all time</div></div></div></div>'
-      : '<div class="card"><div class="empty"><span class="serif">Your plan is waiting.</span>Take the 60 second quiz and get a training plan built for your fitness.<br><br><button class="btn btn-sm" data-tab="plan" style="width:auto">Take the quiz</button></div></div>') +
+      : '<div class="card"><div class="empty"><span class="serif">Your plan is waiting.</span>Take the 60 second quiz and get a training plan built for your fitness.<br><br><button class="btn btn-sm" data-tab="train" style="width:auto">Take the quiz</button></div></div>') +
 
     '<div class="grid2">' +
     '<div class="card"><div class="stat-big">' + d.streak + '</div><div class="count-cap">day streak</div></div>' +

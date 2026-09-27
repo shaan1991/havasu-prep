@@ -32,6 +32,7 @@ RENDER.train = async function (weekArg) {
   return '<div class="pg-hd"><div class="pg-eyebrow">Train</div>' +
     '<div class="pg-title">This week, on the trail to ready.</div>' +
     '<div class="pg-sub">Log each session as you finish it. Rest days count too, recovery is training.</div></div>' +
+    (d.level ? '<div class="lvl-strip"><span>Training as <b>' + esc(d.level.name) + '</b></span><button class="btn-ghost btn-sm" id="train-retake" style="width:auto">Retake quiz</button></div>' : '') +
     (d.days.some((x) => x.taper) || d.week === d.total ? '' : '') +
     '<div class="card"><div class="card-h"><span class="card-t">Week progress</span><span class="card-t">' + pct + '%</span></div>' +
     '<div class="pack-bar"><i style="width:' + pct + '%"></i></div></div>' +
@@ -62,6 +63,8 @@ RENDER.train_mount = function (weekArg) {
   });
   const ex = $('#log-extra');
   if (ex) ex.onclick = () => openLogModal(TRAIN_WEEK, null);
+  const rt = $('#train-retake');
+  if (rt) rt.onclick = () => confirmDlg('Retake the quiz?', 'Your current plan and logged sessions stay saved. A new quiz just rebuilds the plan.', 'Retake', () => quizStart());
 };
 
 function openLogModal(week, dayIdx, dayKind) {

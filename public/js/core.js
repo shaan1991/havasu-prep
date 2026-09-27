@@ -151,9 +151,9 @@ const logoMark = '<svg viewBox="0 0 32 32" fill="none"><path d="M4 25 12 9l5 8 3
 /* ── navigation ───────────────────────────────────────────── */
 const TABS = [
   { id: 'home', label: 'Home', icon: 'home' },
-  { id: 'plan', label: 'My Plan', icon: 'route' },
   { id: 'train', label: 'Train', icon: 'activity' },
   { id: 'pack', label: 'Pack', icon: 'pack' },
+  { id: 'intel', label: 'Intel', icon: 'flag' },
   { id: 'notes', label: 'Notes', icon: 'notes' },
   { id: 'guide', label: 'Guide', icon: 'guide' },
 ];
@@ -200,7 +200,7 @@ function buildNav() {
     '<button class="rail-item" data-act="settings">' + IC.gear + '<span class="lbl">Settings</span></button>' +
     '<button class="rail-item" data-act="signout">' + IC.out + '<span class="lbl">Sign out</span></button>' +
     '</div>';
-  const prim = ['home', 'train', 'pack', 'plan'];
+  const prim = ['home', 'train', 'pack', 'intel'];
   $('#tabbar').innerHTML = prim.map((id) => {
     const t = TABS.find((x) => x.id === id);
     return '<button class="tab-item' + (S.tab === id ? ' active' : '') + '" data-tab="' + id + '">' + IC[t.icon] + '<span>' + t.label + '</span></button>';
