@@ -51,6 +51,38 @@ CREATE TABLE IF NOT EXISTS training_logs (
   FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_logs_user_date ON training_logs(user_id, log_date);
+CREATE TABLE IF NOT EXISTS strava_links (
+  user_id INTEGER PRIMARY KEY,
+  athlete_id INTEGER,
+  athlete_name TEXT,
+  access_token TEXT NOT NULL,
+  refresh_token TEXT NOT NULL,
+  expires_at INTEGER NOT NULL,
+  updated_at TEXT,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS strava_seen (
+  user_id INTEGER NOT NULL,
+  activity_id INTEGER NOT NULL,
+  PRIMARY KEY (user_id, activity_id),
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS crews (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  owner_id INTEGER NOT NULL,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY(owner_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS crew_members (
+  crew_id TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  display_name TEXT NOT NULL,
+  joined_at TEXT NOT NULL,
+  PRIMARY KEY (crew_id, user_id),
+  FOREIGN KEY(crew_id) REFERENCES crews(id) ON DELETE CASCADE,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 CREATE TABLE IF NOT EXISTS pack_items (
   id INTEGER PRIMARY KEY,
   user_id INTEGER NOT NULL,
@@ -112,6 +144,38 @@ CREATE TABLE IF NOT EXISTS training_logs (
   FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_logs_user_date ON training_logs(user_id, log_date);
+CREATE TABLE IF NOT EXISTS strava_links (
+  user_id INTEGER PRIMARY KEY,
+  athlete_id INTEGER,
+  athlete_name TEXT,
+  access_token TEXT NOT NULL,
+  refresh_token TEXT NOT NULL,
+  expires_at INTEGER NOT NULL,
+  updated_at TEXT,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS strava_seen (
+  user_id INTEGER NOT NULL,
+  activity_id INTEGER NOT NULL,
+  PRIMARY KEY (user_id, activity_id),
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS crews (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  owner_id INTEGER NOT NULL,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY(owner_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS crew_members (
+  crew_id TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  display_name TEXT NOT NULL,
+  joined_at TEXT NOT NULL,
+  PRIMARY KEY (crew_id, user_id),
+  FOREIGN KEY(crew_id) REFERENCES crews(id) ON DELETE CASCADE,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 CREATE TABLE IF NOT EXISTS pack_items (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL,

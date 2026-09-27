@@ -721,3 +721,20 @@ input,textarea,select{font-family:inherit;letter-spacing:-.025em;color:var(--fg)
 .map-btns{display:flex;gap:8px;flex-shrink:0}
 .map-btn{display:inline-block;padding:8px 12px;border-radius:999px;background:var(--sel);color:var(--ink);font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap}
 .map-btn:active{transform:scale(.96)}
+
+/* ── Train: crew card ──────────────────────────────────────── */
+.crew-card{padding:0}
+.crew-sec{padding:14px 18px;border-top:1px solid var(--line)}
+.crew-sec:first-of-type{border-top:0}
+.crew-sec-t{font-size:14px;font-weight:700;margin-bottom:8px}
+.strava-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.strava-btns{display:flex;gap:8px;flex-shrink:0}
+.strava-act{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.crew{background:var(--sel);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.crew .card-h{padding:0;margin-bottom:8px}
+.crew-m{margin-bottom:8px}
+.crew-mrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;font-size:14px}
+.crew-foot{display:flex;gap:8px;margin-top:6px}
+.crew-forms{display:grid;gap:8px;margin-top:12px}
+.crew-formrow{display:grid;grid-template-columns:1fr auto;gap:8px}
+.crew-code{font-family:ui-monospace,monospace;letter-spacing:.08em}

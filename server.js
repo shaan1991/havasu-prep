@@ -228,6 +228,172 @@ api.get('/intel', ah(async (req, res) => {
   res.json(out);
 }));
 
+
+/* ── strava + crews ─────────────────────────────────────── */
+const STRAVA_ID = process.env.STRAVA_CLIENT_ID || '';
+const STRAVA_SECRET = process.env.STRAVA_CLIENT_SECRET || '';
+const stravaOn = !!(STRAVA_ID && STRAVA_SECRET);
+const CREW_MAX = 12; /* tribe limit: 12 permits per 2026 reservation */
+
+app.get('/auth/strava', apiAuth, (req, res) => {
+  if (!stravaOn) return res.status(503).send('Strava sync is not set up on this copy of Havasu Prep yet. Add STRAVA_CLIENT_ID and STRAVA_CLIENT_SECRET to the environment.');
+  const u = 'https://www.strava.com/oauth/authorize?client_id=' + STRAVA_ID +
+    '&redirect_uri=' + encodeURIComponent(APP_URL + '/auth/strava/callback') +
+    '&response_type=code&approval_prompt=force&scope=read,activity:read_all';
+  res.redirect(u);
+});
+app.get('/auth/strava/callback', ah(async (req, res) => {
+  const uid = req.headers.cookie && verifyToken(readCookie(req));
+  if (!uid) return res.redirect('/?auth=failed');
+  if (!stravaOn) return res.status(503).send('Strava sync is not configured.');
+  if (!req.query.code) return res.redirect('/app.html?strava=denied');
+  const r = await fetchTimeout('https://www.strava.com/oauth/token', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ client_id: STRAVA_ID, client_secret: STRAVA_SECRET, code: req.query.code, grant_type: 'authorization_code' }),
+  }, 15000);
+  if (!r.ok) return res.redirect('/app.html?strava=failed');
+  const j = await r.json();
+  const a = j.athlete || {};
+  const name = [a.firstname, a.lastname].filter(Boolean).join(' ') || 'Strava athlete';
+  const cur = await get('SELECT * FROM strava_links WHERE user_id = ?', [uid]);
+  const vals = [a.id || null, name, j.access_token, j.refresh_token, j.expires_at, now()];
+  if (cur) await run('UPDATE strava_links SET athlete_id = ?, athlete_name = ?, access_token = ?, refresh_token = ?, expires_at = ?, updated_at = ? WHERE user_id = ?', vals.concat([uid]));
+  else await run('INSERT INTO strava_links (athlete_id, athlete_name, access_token, refresh_token, expires_at, updated_at, user_id) VALUES (?,?,?,?,?,?,?)', vals.concat([uid]));
+  res.redirect('/app.html?strava=connected');
+}));
+
+async function stravaTokenFor(userId) {
+  const row = await get('SELECT * FROM strava_links WHERE user_id = ?', [userId]);
+  if (!row) return null;
+  if (row.expires_at > Math.floor(Date.now() / 1000) + 300) return row;
+  const r = await fetchTimeout('https://www.strava.com/oauth/token', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ client_id: STRAVA_ID, client_secret: STRAVA_SECRET, grant_type: 'refresh_token', refresh_token: row.refresh_token }),
+  }, 15000);
+  if (!r.ok) return null;
+  const j = await r.json();
+  await run('UPDATE strava_links SET access_token = ?, refresh_token = ?, expires_at = ?, updated_at = ? WHERE user_id = ?',
+    [j.access_token, j.refresh_token, j.expires_at, now(), userId]);
+  return Object.assign({}, row, { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: j.expires_at });
+}
+
+const STRAVA_KIND = { Hike: 'hike', Walk: 'walk', TrailRun: 'hike', Run: 'easy' };
+api.get('/strava/status', ah(async (req, res) => {
+  const row = await get('SELECT athlete_name, updated_at FROM strava_links WHERE user_id = ?', [req.user.id]);
+  res.json({ stravaOn, connected: !!row, athlete_name: row ? row.athlete_name : null, synced_at: row ? row.updated_at : null });
+}));
+api.post('/strava/disconnect', ah(async (req, res) => {
+  await run('DELETE FROM strava_links WHERE user_id = ?', [req.user.id]);
+  res.json({ ok: true });
+}));
+api.get('/strava/activities', ah(async (req, res) => {
+  const tok = await stravaTokenFor(req.user.id);
+  if (!tok) return res.status(400).json({ error: 'Connect Strava first' });
+  const r = await fetchTimeout('https://www.strava.com/api/v3/athlete/activities?per_page=30&page=1',
+    { headers: { Authorization: 'Bearer ' + tok.access_token } }, 15000);
+  if (!r.ok) return res.status(502).json({ error: 'Strava did not answer' });
+  const seen = await all('SELECT activity_id FROM strava_seen WHERE user_id = ?', [req.user.id]);
+  const seenSet = new Set(seen.map((x) => x.activity_id));
+  const out = [];
+  for (const a of (await r.json()) || []) {
+    if (seenSet.has(a.id)) continue;
+    const kind = STRAVA_KIND[a.sport_type || a.type];
+    if (!kind) continue;
+    out.push({
+      id: a.id, name: a.name || 'Strava activity', kind,
+      log_date: String(a.start_date_local || '').slice(0, 10) || new Date().toISOString().slice(0, 10),
+      distance_mi: Math.round((a.distance || 0) / 1609.344 * 10) / 10,
+      minutes: Math.round((a.moving_time || 0) / 60),
+    });
+  }
+  res.json({ activities: out });
+}));
+api.post('/strava/import', ah(async (req, res) => {
+  const list = (req.body && req.body.activities) || [];
+  if (!list.length) return res.status(400).json({ error: 'Nothing to import' });
+  let n = 0;
+  for (const a of list.slice(0, 30)) {
+    if (!a.id) continue;
+    const kind = ['walk', 'hike', 'long', 'strength', 'easy', 'stairs'].includes(a.kind) ? a.kind : 'hike';
+    const dup = await get('SELECT 1 FROM strava_seen WHERE user_id = ? AND activity_id = ?', [req.user.id, a.id]);
+    if (dup) continue;
+    await run('INSERT INTO training_logs (user_id, log_date, week_index, day_index, kind, title, minutes, distance_mi, notes, created_at) VALUES (?,?,?,?,?,?,?,?,?,?)',
+      [req.user.id, a.log_date || new Date().toISOString().slice(0, 10), null, null, kind,
+        String(a.name || 'Strava activity').slice(0, 120), Math.max(0, +a.minutes || 0), Math.max(0, +a.distance_mi || 0),
+        'Synced from Strava', now()]);
+    await run('INSERT INTO strava_seen (user_id, activity_id) VALUES (?,?)', [req.user.id, a.id]);
+    n++;
+  }
+  res.json({ imported: n });
+}));
+api.post('/strava/dismiss', ah(async (req, res) => {
+  const ids = (req.body && req.body.ids) || [];
+  for (const id of ids.slice(0, 30)) {
+    try { await run('INSERT INTO strava_seen (user_id, activity_id) VALUES (?,?)', [req.user.id, id]); } catch (e) { /* already seen */ }
+  }
+  res.json({ ok: true });
+}));
+
+/* crews: train together, capped at the tribe group size */
+function crewCode() {
+  const c = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let s = '';
+  for (let i = 0; i < 6; i++) s += c[Math.floor(Math.random() * c.length)];
+  return s;
+}
+function weekStartISO() {
+  const d = new Date();
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+  return d.toISOString().slice(0, 10);
+}
+api.post('/crews', ah(async (req, res) => {
+  const name = String((req.body && req.body.name) || '').trim().slice(0, 60) || 'My crew';
+  let code = crewCode();
+  for (let i = 0; i < 8 && await get('SELECT 1 FROM crews WHERE id = ?', [code]); i++) code = crewCode();
+  await run('INSERT INTO crews (id, name, owner_id, created_at) VALUES (?,?,?,?)', [code, name, req.user.id, now()]);
+  await run('INSERT INTO crew_members (crew_id, user_id, display_name, joined_at) VALUES (?,?,?,?)', [code, req.user.id, req.user.name, now()]);
+  res.json({ id: code, name, code });
+}));
+api.post('/crews/join', ah(async (req, res) => {
+  const code = String((req.body && req.body.code) || '').trim().toUpperCase();
+  const crew = await get('SELECT * FROM crews WHERE id = ?', [code]);
+  if (!crew) return res.status(404).json({ error: 'No crew found with that code' });
+  const mem = await get('SELECT 1 FROM crew_members WHERE crew_id = ? AND user_id = ?', [code, req.user.id]);
+  if (mem) return res.json({ id: code, name: crew.name, code });
+  const count = (await get('SELECT COUNT(*) c FROM crew_members WHERE crew_id = ?', [code])).c;
+  if (count >= CREW_MAX) return res.status(400).json({ error: 'This crew is full (12 max, the tribe limit)' });
+  await run('INSERT INTO crew_members (crew_id, user_id, display_name, joined_at) VALUES (?,?,?,?)', [code, req.user.id, req.user.name, now()]);
+  res.json({ id: code, name: crew.name, code });
+}));
+api.get('/crews', ah(async (req, res) => {
+  const mine = await all('SELECT c.id, c.name, c.owner_id FROM crews c JOIN crew_members m ON m.crew_id = c.id WHERE m.user_id = ? ORDER BY c.created_at', [req.user.id]);
+  const ws = weekStartISO();
+  const out = [];
+  for (const c of mine) {
+    const members = await all('SELECT user_id, display_name FROM crew_members WHERE crew_id = ? ORDER BY joined_at', [c.id]);
+    const rows = [];
+    for (const m of members) {
+      const agg = await get('SELECT COUNT(*) n, COALESCE(SUM(distance_mi),0) mi, COALESCE(SUM(minutes),0) mins FROM training_logs WHERE user_id = ? AND log_date >= ?', [m.user_id, ws]);
+      rows.push({ name: m.display_name, sessions: agg.n, miles: Math.round(agg.mi * 10) / 10, minutes: agg.mins, me: m.user_id === req.user.id });
+    }
+    out.push({ id: c.id, name: c.name, code: c.id, owner: c.owner_id === req.user.id, members: rows });
+  }
+  res.json({ crews: out, max: CREW_MAX });
+}));
+api.post('/crews/:id/leave', ah(async (req, res) => {
+  await run('DELETE FROM crew_members WHERE crew_id = ? AND user_id = ?', [req.params.id, req.user.id]);
+  const left = (await get('SELECT COUNT(*) c FROM crew_members WHERE crew_id = ?', [req.params.id])).c;
+  if (left === 0) await run('DELETE FROM crews WHERE id = ?', [req.params.id]);
+  res.json({ ok: true });
+}));
+api.delete('/crews/:id', ah(async (req, res) => {
+  const crew = await get('SELECT * FROM crews WHERE id = ?', [req.params.id]);
+  if (!crew) return res.status(404).json({ error: 'Not found' });
+  if (crew.owner_id !== req.user.id) return res.status(403).json({ error: 'Only the crew creator can delete it' });
+  await run('DELETE FROM crews WHERE id = ?', [req.params.id]);
+  res.json({ ok: true });
+}));
+
 /* training */
 api.get('/training/week', ah(async (req, res) => {
   const p = await getProfile(req.user.id);

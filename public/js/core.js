@@ -288,8 +288,13 @@ async function boot() {
   $('#app-root').hidden = false;
   buildNav();
   const needsQuiz = !S.profile || !S.profile.level;
-  go(needsQuiz ? 'plan' : 'home');
-  if (needsQuiz) setTimeout(() => toast('Welcome. Take the quiz to get your plan.'), 600);
+  const stravaQ = new URLSearchParams(location.search).get('strava');
+  if (stravaQ) history.replaceState(null, '', location.pathname);
+  go(needsQuiz ? 'plan' : (stravaQ === 'connected' ? 'train' : 'home'));
+  if (stravaQ === 'connected') setTimeout(() => toast('Strava connected. Your crew card is on the Train tab.'), 600);
+  else if (stravaQ === 'denied') setTimeout(() => toast('Strava connection was cancelled.'), 600);
+  else if (stravaQ === 'failed') setTimeout(() => toast('Strava connection failed. Try again.'), 600);
+  else if (needsQuiz) setTimeout(() => toast('Welcome. Take the quiz to get your plan.'), 600);
 }
 
 function refreshMe() {
