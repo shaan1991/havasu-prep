@@ -2,7 +2,6 @@
 'use strict';
 
 const S = {
-  token: localStorage.getItem('havasu_token') || null,
   user: null,
   profile: null,
   tab: 'home',
@@ -39,10 +38,9 @@ function timeAgo(iso) {
 async function api(path, opts) {
   const o = opts || {};
   const headers = { 'Content-Type': 'application/json' };
-  if (S.token) headers.Authorization = 'Bearer ' + S.token;
   let r;
   try {
-    r = await fetch(path, { method: o.method || 'GET', headers, body: o.body ? JSON.stringify(o.body) : undefined });
+    r = await fetch(path, { method: o.method || 'GET', headers, credentials: 'include', body: o.body ? JSON.stringify(o.body) : undefined });
   } catch (e) {
     throw new Error('Could not reach the server. Is it running?');
   }
@@ -54,10 +52,10 @@ async function api(path, opts) {
 }
 
 function signOut(silent) {
-  S.token = null; S.user = null; S.profile = null;
+  S.user = null; S.profile = null;
   localStorage.removeItem('havasu_token');
   if (!silent) toast('Signed out');
-  setTimeout(() => { location.href = '/'; }, silent ? 0 : 600);
+  setTimeout(() => { location.href = '/auth/logout'; }, silent ? 0 : 600);
 }
 
 /* ── click sounds (WebAudio tick) ───────────────────────── */
@@ -265,13 +263,6 @@ async function toggleTheme() {
 
 /* ── boot ───────────────────────────────────────────────── */
 async function boot() {
-  const m = location.hash.match(/[#&]token=([^&]+)/);
-  if (m) {
-    localStorage.setItem('havasu_token', decodeURIComponent(m[1]));
-    S.token = localStorage.getItem('havasu_token');
-    history.replaceState(null, '', location.pathname);
-  }
-  if (!S.token) { location.href = '/'; return; }
   try {
     const d = await api('/api/me');
     S.user = d.user; S.profile = d.profile;

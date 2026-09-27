@@ -30,13 +30,24 @@ if (googleOn) {
 }
 app.use(passport.initialize());
 
+const COOKIE_NAME = 'havasu_token';
+function cookieOpts(req) {
+  const secure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+  return { httpOnly: true, secure: secure, sameSite: 'lax', maxAge: 60 * 86400 * 1000, path: '/' };
+}
+function readCookie(req) {
+  const h = req.headers.cookie || '';
+  const m = h.match(/(?:^|;\s*)havasu_token=([^;]+)/);
+  return m ? decodeURIComponent(m[1]) : null;
+}
 async function issueAndGo(req, res, profile) {
   const name = profile.displayName || (profile.emails && profile.emails[0] && profile.emails[0].value.split('@')[0]) || 'Hiker';
   const email = profile.emails && profile.emails[0] && profile.emails[0].value;
   const avatar = profile.photos && profile.photos[0] && profile.photos[0].value;
   const user = await findOrCreateUser(profile.id, name, email, avatar);
   const token = signToken(user.id);
-  res.redirect('/app.html#token=' + token);
+  res.cookie(COOKIE_NAME, token, cookieOpts(req));
+  res.redirect('/app.html');
 }
 
 const setupHtml = () => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -61,6 +72,11 @@ app.get('/auth/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: '/?auth=failed' }),
   ah((req, res) => issueAndGo(req, res, req.user)));
 
+app.get('/auth/logout', (req, res) => {
+  res.clearCookie(COOKIE_NAME, { path: '/' });
+  res.redirect('/');
+});
+
 if (DEV_LOGIN) {
   app.post('/auth/dev', ah(async (req, res) => {
     const user = await findOrCreateUser('dev-local', 'Test Hiker', 'test@example.com', null);
@@ -74,9 +90,8 @@ if (DEV_LOGIN) {
 
 /* ── api auth ───────────────────────────────────────────── */
 const apiAuth = ah(async (req, res, next) => {
-  const h = req.headers.authorization || '';
-  const tok = h.startsWith('Bearer ') ? h.slice(7) : null;
-  const uid = tok && verifyToken(tok);
+  const tok = readCookie(req);
+  const uid = tok ? verifyToken(tok) : null;
   if (!uid) return res.status(401).json({ error: 'Not signed in' });
   const user = await get('SELECT id, name, email, avatar, created_at FROM users WHERE id = ?', [uid]);
   if (!user) return res.status(401).json({ error: 'Account not found' });
