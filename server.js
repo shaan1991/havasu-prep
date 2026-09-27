@@ -20,7 +20,7 @@ const app = express();
 app.use(express.json({ limit: '256kb' }));
 
 /* ── google oauth ───────────────────────────────────────── */
-const googleOn = GOOGLE_ID && GOOGLE_SECRET;
+const googleOn = !!(GOOGLE_ID && GOOGLE_SECRET);
 if (googleOn) {
   passport.use(new GoogleStrategy({
     clientID: GOOGLE_ID,
