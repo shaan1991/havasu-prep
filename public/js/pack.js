@@ -5,9 +5,10 @@ RENDER.pack = async function () {
   const d = await api('/api/pack');
   const items = d.items;
   if (!items.length) {
-    return '<div class="pg-hd"><div class="pg-eyebrow">Pack</div><div class="pg-title">Your packing list</div></div>' +
-      '<div class="card"><div class="empty"><span class="serif">Nothing here yet.</span>Take the quiz to seed the base list, or add your own items below.</div>' +
-      '<button class="btn" id="pack-add0">' + IC.plus + ' Add an item</button></div>';
+    return '<div class="pg-hd"><div class="pg-eyebrow">Pack</div><div class="pg-title">Your packing list</div>' +
+      '<div class="pg-sub">Everything you will carry into the canyon, in one checklist.</div></div>' +
+      '<div class="card"><div class="empty"><span class="serif">Nothing here yet.</span>Load the Havasupai essentials checklist, then check things off as they go into the bag. Every item is editable.</div>' +
+      '<button class="btn" id="pack-seed">' + IC.plus + ' Load the essentials</button></div>';
   }
   const order = [];
   const groups = {};
@@ -58,6 +59,14 @@ RENDER.pack_mount = function () {
   $$('#panel [data-pack-edit]').forEach((b) => b.onclick = () => openPackModal(+b.dataset.packEdit));
   const add = $('#pack-add') || $('#pack-add0');
   if (add) add.onclick = () => openPackModal(null);
+  const seed = $('#pack-seed');
+  if (seed) seed.onclick = async () => {
+    try {
+      await api('/api/pack/reset', { method: 'POST' });
+      toast('Essentials loaded');
+      go('pack');
+    } catch (e) { toast(e.message); }
+  };
   const rs = $('#pack-reset');
   if (rs) rs.onclick = () => confirmDlg('Restore the base list?', 'This replaces your whole list with the original base list. Your custom items will be gone.', 'Restore', async () => {
     await api('/api/pack/reset', { method: 'POST' });
