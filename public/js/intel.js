@@ -56,6 +56,194 @@ const SHOTS = [
   },
 ];
 
+/* Reference photos per shot location. Wikimedia Commons (hotlink friendly)
+   plus one CC BY SA Flickr image. Credits shown in the lightbox. */
+/* Ordered to match the SHOTS array above: one entry per location. */
+const SHOT_IMGS = [
+ [
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-04-hav-eric-9561.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-04-hav-eric-9561.jpg?width=1280",
+   "cap": "Hikers on the trail at golden hour",
+   "credit": "© Robertbody at English Wikipedia · CC BY 3.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-22-hav-hua-4987.JPG?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-22-hav-hua-4987.JPG?width=1280",
+   "cap": "The switchbacks from above",
+   "credit": "© Robertbody at English Wikipedia · CC BY 3.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/2014%2C%20Intrepid%20Hikers%20on%20the%20Trail%20-%20panoramio.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/2014%2C%20Intrepid%20Hikers%20on%20the%20Trail%20-%20panoramio.jpg?width=1280",
+   "cap": "The long walk in",
+   "credit": "© Chris English · CC BY SA 3.0 · Wikimedia Commons"
+  }
+ ],
+ [
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Lower%20rock%20falls.JPG?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Lower%20rock%20falls.JPG?width=1280",
+   "cap": "Wide on the cascades",
+   "credit": "© Gonzo fan2007 · CC BY SA 3.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Dry%20navajo%20falls.JPG?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Dry%20navajo%20falls.JPG?width=1280",
+   "cap": "Travertine detail",
+   "credit": "© Gonzo fan2007 · CC BY SA 3.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Navajo%20Falls%20in%20Cataract%20Canyon%2C%20Grand%20Canyon%2C%20Arizona%2C%201900-1940%20%28CHS-3843%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Navajo%20Falls%20in%20Cataract%20Canyon%2C%20Grand%20Canyon%2C%20Arizona%2C%201900-1940%20%28CHS-3843%29.jpg?width=1280",
+   "cap": "Navajo Falls, circa 1900",
+   "credit": "Public domain · Wikimedia Commons"
+  }
+ ],
+ [
+  {
+   "thumb": "https://live.staticflickr.com/2446/3961693313_6186bccca9_b.jpg",
+   "src": "https://live.staticflickr.com/2446/3961693313_6186bccca9_b.jpg",
+   "cap": "Fifty Foot Falls up close",
+   "credit": "© rwiedower · CC BY SA 2.0 · Flickr"
+  }
+ ],
+ [
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%2C%20Grand%20Canyon.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%2C%20Grand%20Canyon.jpg?width=1280",
+   "cap": "The classic view from above",
+   "credit": "© Traveling Man · CC BY SA 3.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%201%20md%20edit.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%201%20md%20edit.jpg?width=1280",
+   "cap": "Frontal with the pools below",
+   "credit": "© User:Moondigger · CC BY SA 2.5 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20Paradise.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20Paradise.jpg?width=1280",
+   "cap": "Turquoise water in midday sun",
+   "credit": "© Brent Sisson · CC BY SA 4.0 · Wikimedia Commons"
+  }
+ ],
+ [
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/01470%201948%20Grand%20Canyon%20Historic%20Trout%20Stocking%20Trip%20-%20Havasu%20Creek%20%286904870479%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/01470%201948%20Grand%20Canyon%20Historic%20Trout%20Stocking%20Trip%20-%20Havasu%20Creek%20%286904870479%29.jpg?width=1280",
+   "cap": "Silky water over travertine",
+   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/05196%20Grand%20Canyon%20Nat%20Park%20Historic%20River%20Photo%20%287305034038%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/05196%20Grand%20Canyon%20Nat%20Park%20Historic%20River%20Photo%20%287305034038%29.jpg?width=1280",
+   "cap": "Pools between the falls",
+   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/01928%20Grand%20Canyon%20Historic%20Havasu%20Creek%201949%20%286904877181%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/01928%20Grand%20Canyon%20Historic%20Havasu%20Creek%201949%20%286904877181%29.jpg?width=1280",
+   "cap": "Cascade detail in the creek",
+   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
+  }
+ ],
+ [
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Arizona%2C%202006.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Arizona%2C%202006.jpg?width=1280",
+   "cap": "From the base, looking up",
+   "credit": "Public domain · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls.jpg?width=1280",
+   "cap": "The full drop, with scale",
+   "credit": "© Riffy Thomas · CC BY SA 4.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Havasu%20Canyon%2C%20Arizona%2C%20ca.1930%20%28CHS-4680%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Havasu%20Canyon%2C%20Arizona%2C%20ca.1930%20%28CHS-4680%29.jpg?width=1280",
+   "cap": "Mooney Falls, circa 1930",
+   "credit": "Public domain · Wikimedia Commons"
+  }
+ ],
+ [
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Beaver%20falls.JPG?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Beaver%20falls.JPG?width=1280",
+   "cap": "The terraced cascades",
+   "credit": "© Gonzo fan2007 · CC BY SA 3.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Rope%20Climb%20Beaver%20Falls.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Rope%20Climb%20Beaver%20Falls.jpg?width=1280",
+   "cap": "The rope climb section",
+   "credit": "Public domain · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Grca%2031880%20-%20Havasupai%20-%20Circa%201900%20%286704208915%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Grca%2031880%20-%20Havasupai%20-%20Circa%201900%20%286704208915%29.jpg?width=1280",
+   "cap": "Beaver Falls, circa 1900",
+   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
+  }
+ ],
+ [
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200193%20%286094535727%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200193%20%286094535727%29.jpg?width=1280",
+   "cap": "Blue green meets the Colorado",
+   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200184%20%286095079826%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200184%20%286095079826%29.jpg?width=1280",
+   "cap": "Rafts at the meeting point",
+   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/The%20confluence%20of%20Havasu%20Creek%20and%20the%20Colorado%20River.%20Grand%20Canyon%20National%20Park%2C%20Arizona%20%2826357567356%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/The%20confluence%20of%20Havasu%20Creek%20and%20the%20Colorado%20River.%20Grand%20Canyon%20National%20Park%2C%20Arizona%20%2826357567356%29.jpg?width=1280",
+   "cap": "Where the creek meets the river",
+   "credit": "© Paxson Woelber · CC BY 2.0 · Wikimedia Commons"
+  }
+ ],
+ [
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/SupaiVillageFirstSignWigleeva.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/SupaiVillageFirstSignWigleeva.jpg?width=1280",
+   "cap": "The village welcome sign",
+   "credit": "© Elf · CC BY SA 3.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Helicopter%20in%20Supai%20Village%20-%20panoramio.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Helicopter%20in%20Supai%20Village%20-%20panoramio.jpg?width=1280",
+   "cap": "Helicopter pad below the cliffs",
+   "credit": "© Outdoor Craziness · CC BY SA 3.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/01925%20Grand%20Canyon%20Historic%20Supai%20Village%20Irragation%20Ditch%201949%20%286904876421%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/01925%20Grand%20Canyon%20Historic%20Supai%20Village%20Irragation%20Ditch%201949%20%286904876421%29.jpg?width=1280",
+   "cap": "Supai Village, 1949",
+   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
+  }
+ ],
+ [
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20at%20Night.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20at%20Night.jpg?width=1280",
+   "cap": "Havasu Falls under the stars",
+   "credit": "© Jeremy Evans · CC BY SA 2.0 · Wikimedia Commons"
+  },
+  {
+   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasupai%20at%20Night%20%28Unsplash%29.jpg?width=480",
+   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasupai%20at%20Night%20%28Unsplash%29.jpg?width=1280",
+   "cap": "Mooney Falls at night",
+   "credit": "© Jeremy Bishop tidesinourveins · CC0 · Wikimedia Commons"
+  }
+ ]
+];
+
 /* Key locations: one tap directions. Queries are place names, no coordinates
    are fabricated; the map apps resolve them. */
 const LOCATIONS = [
@@ -158,11 +346,25 @@ RENDER.intel = async function () {
         '<div class="t2">' + esc(n.source || 'News') + (n.published ? ' · ' + esc(timeAgo(n.published)) : '') + '</div></div>' +
         '<span class="news-go">↗</span></a>').join('');
 
-  const shotsHtml = SHOTS.map((s) =>
-    '<div class="card shot-card"><div class="card-h"><span class="card-t">' + esc(s.name) + '</span></div>' +
-    '<div class="shot-meta">' + esc(s.meta) + '</div>' +
-    '<ul class="shot-list">' + s.shots.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
-    '<div class="shot-tip">' + esc(s.tip) + '</div></div>').join('');
+  function shotPins() {
+    try { return JSON.parse(localStorage.getItem('havasu_shotpins') || '{}'); }
+    catch (e) { return {}; }
+  }
+  const pins = shotPins();
+  const shotsHtml = SHOTS.map((s, si) => {
+    const imgs = SHOT_IMGS[si] || [];
+    const strip = imgs.length === 0 ? '' :
+      '<div class="shot-label">Reference photos</div><div class="shot-strip">' +
+      imgs.map((im, ii) =>
+        '<button class="shot-thumb' + (pins[si] === ii ? ' pinned' : '') + '" data-shotcard="' + si + '" data-shotimg="' + ii + '"' +
+        ' aria-label="View reference photo: ' + esc(im.cap) + '">' +
+        '<img loading="lazy" src="' + esc(im.thumb) + '" alt="' + esc(im.cap) + '">' +
+        (pins[si] === ii ? '<span class="shot-pinbadge">Pinned</span>' : '') + '</button>').join('') + '</div>';
+    return '<div class="card shot-card"><div class="card-h"><span class="card-t">' + esc(s.name) + '</span></div>' +
+      '<div class="shot-meta">' + esc(s.meta) + '</div>' + strip +
+      '<ul class="shot-list">' + s.shots.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
+      '<div class="shot-tip">' + esc(s.tip) + '</div></div>';
+  }).join('');
 
   return '<div class="pg-hd"><div class="pg-eyebrow">Intel</div>' +
     '<div class="pg-title">Canyon conditions, live.</div>' +
@@ -178,8 +380,16 @@ RENDER.intel = async function () {
 
     '<div class="pg-hd" style="margin-top:26px"><div class="pg-eyebrow">Shot list</div>' +
     '<div class="pg-title" style="font-size:26px">Film it like you mean it.</div>' +
-    '<div class="pg-sub">Location by location ideas, built for the canyon as it is.</div></div>' +
-    colSection('sh', 'Shot list', SHOTS.length + ' locations', '<div class="stagger">' + shotsHtml + '</div>');
+    '<div class="pg-sub">Location by location ideas with reference photos. Tap any photo to view it large, pin the ones you want to chase.</div></div>' +
+    colSection('sh', 'Shot list', SHOTS.length + ' locations', '<div class="stagger">' + shotsHtml + '</div>') +
+    '<div class="shotbox" id="shotbox" hidden><div class="shotbox-back" id="shotbox-back"></div>' +
+    '<div class="shotbox-main"><button class="shotbox-x" id="shotbox-x" aria-label="Close">\u00d7</button>' +
+    '<button class="shotbox-nav prev" id="shotbox-prev" aria-label="Previous photo">\u2039</button>' +
+    '<img id="shotbox-img" alt="">' +
+    '<button class="shotbox-nav next" id="shotbox-next" aria-label="Next photo">\u203a</button></div>' +
+    '<div class="shotbox-cap"><div class="t1" id="shotbox-cap"></div>' +
+    '<div class="t2" id="shotbox-credit"></div>' +
+    '<button class="btn btn-sm" id="shotbox-pin" style="width:auto;margin-top:10px">Pin as my reference</button></div></div>';
 };
 
 RENDER.intel_mount = function () {
@@ -196,4 +406,55 @@ RENDER.intel_mount = function () {
     const open = body.classList.toggle('open');
     h.classList.toggle('closed', !open);
   });
+
+  /* Shot list lightbox */
+  const box = $('#shotbox');
+  if (box) {
+    let bCard = 0, bIdx = 0;
+    const pins = (() => { try { return JSON.parse(localStorage.getItem('havasu_shotpins') || '{}'); } catch (e) { return {}; } })();
+    const savePins = () => { try { localStorage.setItem('havasu_shotpins', JSON.stringify(pins)); } catch (e) {} };
+    function show() {
+      const imgs = SHOT_IMGS[bCard] || [];
+      if (!imgs.length) return;
+      bIdx = (bIdx + imgs.length) % imgs.length;
+      const im = imgs[bIdx];
+      const img = $('#shotbox-img');
+      img.src = im.src; img.alt = im.cap;
+      $('#shotbox-cap').textContent = SHOTS[bCard].name + ': ' + im.cap;
+      $('#shotbox-credit').textContent = im.credit;
+      const pinBtn = $('#shotbox-pin');
+      const isPinned = pins[bCard] === bIdx;
+      pinBtn.textContent = isPinned ? 'Pinned as my reference' : 'Pin as my reference';
+      pinBtn.classList.toggle('pinned-on', isPinned);
+      const single = imgs.length < 2;
+      $('#shotbox-prev').style.display = single ? 'none' : '';
+      $('#shotbox-next').style.display = single ? 'none' : '';
+    }
+    function openBox(card, idx) { bCard = card; bIdx = idx; box.hidden = false; document.body.style.overflow = 'hidden'; show(); }
+    function closeBox() { box.hidden = true; document.body.style.overflow = ''; }
+    $$('.shot-thumb').forEach((t) => { t.onclick = () => openBox(+t.dataset.shotcard, +t.dataset.shotimg); });
+    $('#shotbox-x').onclick = closeBox;
+    $('#shotbox-back').onclick = closeBox;
+    $('#shotbox-prev').onclick = (e) => { e.stopPropagation(); bIdx--; show(); };
+    $('#shotbox-next').onclick = (e) => { e.stopPropagation(); bIdx++; show(); };
+    $('#shotbox-pin').onclick = () => {
+      if (pins[bCard] === bIdx) delete pins[bCard]; else pins[bCard] = bIdx;
+      savePins(); show();
+      $$('.shot-thumb').forEach((t) => {
+        const on = pins[+t.dataset.shotcard] === +t.dataset.shotimg;
+        t.classList.toggle('pinned', on);
+        const badge = t.querySelector('.shot-pinbadge');
+        if (on && !badge) { const sp = document.createElement('span'); sp.className = 'shot-pinbadge'; sp.textContent = 'Pinned'; t.appendChild(sp); }
+        if (!on && badge) badge.remove();
+      });
+    };
+    if (!window.__shotboxKeys) {
+      window.__shotboxKeys = true;
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        const b = document.getElementById('shotbox');
+        if (b && !b.hidden) { b.hidden = true; document.body.style.overflow = ''; }
+      });
+    }
+  }
 };
