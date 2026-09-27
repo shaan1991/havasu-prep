@@ -169,6 +169,7 @@ input,textarea,select{font-family:inherit;letter-spacing:-.025em;color:var(--fg)
 /* ── cards ──────────────────────────────────────────────── */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;box-shadow:var(--sh-sm);position:relative;overflow:hidden}
 .card + .card{margin-top:14px}
+.card + .grid2,.card + .grid3{margin-top:14px}
 .grid2>.card+.card,.grid3>.card+.card{margin-top:0}
 .card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .card-t{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--m)}
