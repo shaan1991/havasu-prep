@@ -78,6 +78,8 @@ input,textarea,select{font-family:inherit;letter-spacing:-.025em;color:var(--fg)
 .auth-title{font-family:'Instrument Serif',Georgia,serif;font-size:30px;margin-bottom:6px;color:var(--w)}
 .auth-sub{font-size:14px;color:var(--m);margin-bottom:26px;line-height:1.55}
 .f-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--m);margin:0 0 8px 2px}
+.f-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f-grid2>*{min-width:0}
 .f-input{width:100%;background:var(--bg-track);border:1px solid var(--border);border-radius:14px;padding:14px 16px;font-size:16px;outline:none;box-shadow:var(--sh-in);transition:border-color .2s,box-shadow .2s;margin-bottom:16px}
 .f-input:focus{border-color:var(--ring);box-shadow:var(--sh-in),0 0 0 3px var(--ring-press)}
 .f-input::placeholder{color:var(--dim)}
@@ -385,7 +387,7 @@ input,textarea,select{font-family:inherit;letter-spacing:-.025em;color:var(--fg)
 /* ── modal / toast ──────────────────────────────────────── */
 .modal-back{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:flex-end;justify-content:center;padding:0;animation:fadeIn .25s}
 @media(min-width:601px){.modal-back{align-items:center;padding:24px}}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:26px 26px 0 0;width:100%;max-width:520px;max-height:88vh;max-height:88dvh;overflow:auto;padding:28px 24px calc(28px + env(safe-area-inset-bottom));box-shadow:var(--sh);animation:modalIn .38s cubic-bezier(.2,.9,.25,1.1)}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:26px 26px 0 0;width:100%;max-width:520px;max-height:88vh;max-height:88dvh;overflow-y:auto;overflow-x:hidden;padding:28px 24px calc(28px + env(safe-area-inset-bottom));box-shadow:var(--sh);animation:modalIn .38s cubic-bezier(.2,.9,.25,1.1)}
 @media(min-width:601px){.modal{border-radius:26px}}
 @keyframes modalIn{from{opacity:0;transform:translateY(40px) scale(.98)}to{opacity:1;transform:none}}
 .modal-topic{font-family:'Instrument Serif',Georgia,serif;font-size:24px;color:var(--w);margin-bottom:6px}

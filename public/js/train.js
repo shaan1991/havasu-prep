@@ -86,7 +86,7 @@ function openLogModal(week, dayIdx, dayKind) {
     '<div class="f-label">Kind</div>' +
     '<div class="chip-row" id="lg-kinds">' + kinds.map((k) =>
       '<button class="chip' + (k === defKind ? ' active' : '') + '" data-k="' + k + '">' + KIND_LABEL[k] + '</button>').join('') + '</div>' +
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' +
+    '<div class="f-grid2">' +
     '<div><div class="f-label">Miles</div><input class="f-input" id="lg-mi" type="number" min="0" step="0.1" placeholder="0"></div>' +
     '<div><div class="f-label">Minutes</div><input class="f-input" id="lg-min" type="number" min="0" step="1" placeholder="0"></div></div>' +
     '<div class="f-label">Date</div>' +
