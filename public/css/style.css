@@ -141,7 +141,7 @@ input,textarea,select{font-family:inherit;letter-spacing:-.025em;color:var(--fg)
 
 /* mobile bottom tab bar */
 #tabbar{position:fixed;left:0;right:0;bottom:0;z-index:400;display:none;background:var(--surface);border-top:1px solid var(--hair-soft);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
-@media(max-width:900px),(hover:none){#tabbar{display:grid;grid-template-columns:repeat(4,1fr)}}
+@media(max-width:900px),(hover:none){#tabbar{display:grid;grid-template-columns:repeat(5,1fr)}}
 .tab-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:14px;color:var(--m);font-size:10px;font-weight:700;letter-spacing:.04em;position:relative}
 .tab-item svg{width:22px;height:22px}
 .tab-item.active{color:var(--accent-eff)}
