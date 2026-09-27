@@ -97,7 +97,7 @@ function colSection(id, title, meta, bodyHtml, open) {
     '<span class="card-t">' + esc(title) + '</span>' +
     '<span class="col-right">' + (meta ? '<span class="card-t dim">' + esc(meta) + '</span>' : '') +
     '<span class="col-chev">▾</span></span></button>' +
-    '<div class="col-body' + (open === false ? '' : ' open') + '">' + bodyHtml + '</div></div>';
+    '<div class="col-body' + (open === true ? ' open' : '') + '">' + bodyHtml + '</div></div>';
 }
 
 RENDER.intel = async function () {
@@ -132,9 +132,9 @@ RENDER.intel = async function () {
     '<div class="contact-card"><div class="grow"><div class="t1">' + esc(c.name) + '</div>' +
     '<div class="t2">' + esc(c.sub) + '</div></div>' +
     '<a class="num" href="tel:' + c.tel + '">' + esc(c.num) + '</a></div>').join('');
-  const gettingHtml = locHtml +
-    (contactsHtml ? '<div class="key-sub">Key contacts</div>' + contactsHtml +
-      '<div class="t2" style="margin-top:10px">Numbers verified against official sources in September 2026. In a true emergency on the trail, call 911 first if you have any signal at all.</div>' : '');
+  const contactsWidget = contactsHtml
+    ? contactsHtml + '<div class="t2" style="margin-top:10px">Numbers verified against official sources in September 2026. In a true emergency on the trail, call 911 first if you have any signal at all.</div>'
+    : '<div class="empty" style="padding:16px">Contacts are in the Guide tab.</div>';
 
   const alerts = d.alerts || [];
   const alertsHtml = d.errors.alerts
@@ -171,7 +171,8 @@ RENDER.intel = async function () {
     '<button class="btn-ghost btn-sm" id="intel-refresh" style="width:auto">Refresh</button></div></div>' +
 
     colSection('wx', 'Now in Supai', '7 day', wxHtml) +
-    colSection('go', 'Getting there', 'maps & contacts', gettingHtml) +
+    colSection('go', 'Getting there', 'maps', locHtml) +
+    colSection('ct', 'Key contacts', 'tap to call', contactsWidget) +
     colSection('al', 'Alerts', 'NWS' + (alerts.length ? ' · ' + alerts.length : ''), alertsHtml) +
     colSection('nw', 'Havasupai in the news', null, newsHtml) +
 
