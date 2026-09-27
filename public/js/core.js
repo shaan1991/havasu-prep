@@ -126,6 +126,7 @@ const IC = {
   pack: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 12.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M9 13v4M12 13v4M15 13v4"/></svg>',
   notes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>',
   guide: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+  share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4"/><path d="M7 8l5-5 5 5"/><path d="M5 12v9h14v-9"/></svg>',
   gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.4 1z"/></svg>',
   menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
   x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
@@ -197,6 +198,7 @@ function buildNav() {
       '<button class="rail-item' + (S.tab === t.id ? ' active' : '') + '" data-tab="' + t.id + '">' + IC[t.icon] + '<span class="lbl">' + t.label + '</span></button>').join('') + '</div>' +
     '<div class="rail-foot">' +
     '<button class="rail-item" data-act="theme">' + (document.documentElement.dataset.theme === 'light' ? IC.moon : IC.sun) + '<span class="lbl">Toggle theme</span></button>' +
+    '<button class="rail-item" data-act="invite">' + IC.share + '<span class="lbl">Invite</span></button>' +
     '<button class="rail-item" data-act="settings">' + IC.gear + '<span class="lbl">Settings</span></button>' +
     '<button class="rail-item" data-act="signout">' + IC.out + '<span class="lbl">Sign out</span></button>' +
     '</div>';
@@ -208,6 +210,7 @@ function buildNav() {
   $('#menu-pop .mob-menu').innerHTML =
     TABS.map((t) => '<button class="mob-mi' + (S.tab === t.id ? ' active' : '') + '" data-tab="' + t.id + '">' + IC[t.icon] + t.label + '</button>').join('') +
     '<div class="mob-sep"></div>' +
+    '<button class="mob-mi" data-act="invite">' + IC.share + 'Invite friends</button>' +
     '<button class="mob-mi" data-act="settings">' + IC.gear + 'Settings</button>' +
     '<button class="mob-mi" data-act="signout">' + IC.out + 'Sign out</button>';
 }
@@ -223,9 +226,19 @@ document.addEventListener('click', (e) => {
   const a = act.dataset.act;
   if (a === 'menu') { ($('#menu-pop').hidden ? openMenu() : closeMenu()); }
   else if (a === 'theme') { toggleTheme(); }
+  else if (a === 'invite') { inviteFriends(); }
   else if (a === 'settings') { go('settings'); }
   else if (a === 'signout') { confirmDlg('Sign out?', 'Your training data stays saved under your Google account.', 'Sign out', () => signOut()); }
 });
+
+async function inviteFriends() {
+  closeMenu();
+  const url = 'https://havasu-prep.vercel.app/';
+  const data = { title: 'Havasu Prep', text: 'Training for Havasupai? This app builds the plan, the pack list, and live canyon intel. Join me.', url };
+  if (navigator.share) { try { await navigator.share(data); } catch (e) {} return; }
+  try { await navigator.clipboard.writeText(url); toast('Invite link copied. Send it to your crew.'); }
+  catch (e) { prompt('Copy your invite link:', url); }
+}
 
 async function toggleTheme() {
   const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';

@@ -56,6 +56,17 @@ const SHOTS = [
   },
 ];
 
+/* Key locations: one tap directions. Queries are place names, no coordinates
+   are fabricated; the map apps resolve them. */
+const LOCATIONS = [
+  { name: 'Permit check-in', desc: 'Grand Canyon Caverns Inn · Route 66, Peach Springs', q: 'Grand Canyon Caverns Inn, Peach Springs, AZ' },
+  { name: 'Trailhead & parking', desc: 'Hualapai Hilltop · end of Indian Road 18', q: 'Hualapai Hilltop Trailhead, Arizona' },
+  { name: 'Supai Village', desc: 'Tourist office · 8 miles from the trailhead', q: 'Supai, Arizona' },
+  { name: 'Havasu Falls', desc: '2 miles past the village', q: 'Havasu Falls, Arizona' },
+  { name: 'Havasupai Campground', desc: 'Between Havasu Falls and Mooney Falls', q: 'Havasupai Campground, Arizona' },
+];
+const KEY_CONTACT_NAMES = ['Grand Canyon Caverns Inn', 'Havasupai Tourist Office', 'Campground Rangers Office', 'Coconino County Sheriff', 'Kingman Regional Medical Center', 'Poison Control'];
+
 function timeAgo(iso) {
   if (!iso) return '';
   const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
@@ -81,6 +92,13 @@ function fmtAlertDate(iso) {
   try { return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ', ' + new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }); }
   catch (e) { return ''; }
 }
+function colSection(id, title, meta, bodyHtml, open) {
+  return '<div class="card col-card"><button class="col-head" data-col="' + id + '">' +
+    '<span class="card-t">' + esc(title) + '</span>' +
+    '<span class="col-right">' + (meta ? '<span class="card-t dim">' + esc(meta) + '</span>' : '') +
+    '<span class="col-chev">▾</span></span></button>' +
+    '<div class="col-body' + (open === false ? '' : ' open') + '">' + bodyHtml + '</div></div>';
+}
 
 RENDER.intel = async function () {
   let d;
@@ -100,6 +118,23 @@ RENDER.intel = async function () {
         '<div class="wx-day"><div class="wx-d">' + esc(wxDayName(x.date)) + '</div>' +
         '<div class="wx-t">' + esc(String(x.hi)) + '°<span>' + esc(String(x.lo)) + '°</span></div>' +
         '<div class="wx-p">' + esc(String(x.precip)) + '%</div></div>').join('') + '</div>';
+
+  const locHtml = LOCATIONS.map((l) => {
+    const g = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(l.q);
+    const a = 'https://maps.apple.com/?q=' + encodeURIComponent(l.q);
+    return '<div class="loc-row"><div class="grow"><div class="t1">' + esc(l.name) + '</div>' +
+      '<div class="t2">' + esc(l.desc) + '</div></div>' +
+      '<div class="map-btns"><a class="map-btn" href="' + g + '" target="_blank" rel="noopener">Google Maps</a>' +
+      '<a class="map-btn" href="' + a + '" target="_blank" rel="noopener">Apple Maps</a></div></div>';
+  }).join('');
+  const keyContacts = (typeof CONTACTS !== 'undefined' ? KEY_CONTACT_NAMES.map((n) => CONTACTS.find((c) => c.name === n)).filter(Boolean) : []);
+  const contactsHtml = keyContacts.map((c) =>
+    '<div class="contact-card"><div class="grow"><div class="t1">' + esc(c.name) + '</div>' +
+    '<div class="t2">' + esc(c.sub) + '</div></div>' +
+    '<a class="num" href="tel:' + c.tel + '">' + esc(c.num) + '</a></div>').join('');
+  const gettingHtml = locHtml +
+    (contactsHtml ? '<div class="key-sub">Key contacts</div>' + contactsHtml +
+      '<div class="t2" style="margin-top:10px">Numbers verified against official sources in September 2026. In a true emergency on the trail, call 911 first if you have any signal at all.</div>' : '');
 
   const alerts = d.alerts || [];
   const alertsHtml = d.errors.alerts
@@ -135,16 +170,15 @@ RENDER.intel = async function () {
     '<div class="intel-bar"><span class="t2">Updated ' + esc(timeAgo(d.updated_at)) + '</span>' +
     '<button class="btn-ghost btn-sm" id="intel-refresh" style="width:auto">Refresh</button></div></div>' +
 
-    '<div class="card"><div class="card-h"><span class="card-t">Now in Supai</span><span class="card-t">7 day</span></div>' + wxHtml + '</div>' +
-
-    '<div class="card"><div class="card-h"><span class="card-t">Alerts</span><span class="card-t">NWS</span></div>' + alertsHtml + '</div>' +
-
-    '<div class="card"><div class="card-h"><span class="card-t">Havasupai in the news</span></div>' + newsHtml + '</div>' +
+    colSection('wx', 'Now in Supai', '7 day', wxHtml) +
+    colSection('go', 'Getting there', 'maps & contacts', gettingHtml) +
+    colSection('al', 'Alerts', 'NWS' + (alerts.length ? ' · ' + alerts.length : ''), alertsHtml) +
+    colSection('nw', 'Havasupai in the news', null, newsHtml) +
 
     '<div class="pg-hd" style="margin-top:26px"><div class="pg-eyebrow">Shot list</div>' +
     '<div class="pg-title" style="font-size:26px">Film it like you mean it.</div>' +
     '<div class="pg-sub">Location by location ideas, built for the canyon as it is.</div></div>' +
-    '<div class="stagger">' + shotsHtml + '</div>';
+    colSection('sh', 'Shot list', SHOTS.length + ' locations', '<div class="stagger">' + shotsHtml + '</div>');
 };
 
 RENDER.intel_mount = function () {
@@ -156,4 +190,9 @@ RENDER.intel_mount = function () {
   };
   const rt = $('#intel-retry');
   if (rt) rt.onclick = () => go('intel');
+  $$('.col-head').forEach((h) => h.onclick = () => {
+    const body = h.nextElementSibling;
+    const open = body.classList.toggle('open');
+    h.classList.toggle('closed', !open);
+  });
 };
