@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Havasu Prep metrics</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+.mx-wrap{max-width:920px;margin:0 auto;padding:28px 18px 60px}
+.mx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.mx-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.mx-num{font-family:'Instrument Serif',Georgia,serif;font-size:38px;color:var(--w);line-height:1}
+.mx-lab{font-size:12px;color:var(--m);margin-top:6px}
+.mx-bars{display:flex;align-items:flex-end;gap:3px;height:110px;margin-top:12px}
+.mx-bar{flex:1;background:var(--user-accent);border-radius:3px 3px 0 0;min-height:3px;opacity:.85}
+.mx-bar.dim{background:var(--dim);opacity:.5}
+.mx-x{font-size:10px;color:var(--dim);margin-top:6px}
+.mx-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px}
+.mx-row:last-child{border-bottom:0}
+.mx-funnel{display:flex;gap:8px;margin-top:12px}
+.mx-step{flex:1;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 6px}
+.mx-step .n{font-size:22px;font-weight:800;color:var(--w)}
+.mx-step .p{font-size:12px;color:var(--user-accent);font-weight:700}
+.mx-step .l{font-size:11px;color:var(--m);margin-top:4px}
+.mx-story{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:10px;font-size:14px;line-height:1.5;color:var(--fg);display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.mx-story button{flex:0 0 auto}
+.mx-err{max-width:520px;margin:80px auto;text-align:center;color:var(--m);line-height:1.6;padding:0 20px}
+.mx-sec{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:26px 0 4px}
+</style>
+</head>
+<body>
+<div class="mx-wrap" id="mx" hidden>
+  <div class="pg-title serif">Metrics</div>
+  <div class="pg-sub" id="mx-updated">Private dashboard</div>
+
+  <div class="mx-grid" id="mx-cards"></div>
+
+  <div class="mx-sec">Activation</div>
+  <div class="mx-card"><div class="mx-funnel" id="mx-funnel"></div></div>
+
+  <div class="mx-sec">Signups per day, last 30 days</div>
+  <div class="mx-card"><div class="mx-bars" id="mx-signups"></div><div class="mx-x" id="mx-signups-x"></div></div>
+
+  <div class="mx-sec">Signins per day, last 14 days</div>
+  <div class="mx-card"><div class="mx-bars" id="mx-signins"></div><div class="mx-x">Counts from this deploy onward</div></div>
+
+  <div class="mx-sec">Tab opens, last 30 days</div>
+  <div class="mx-card" id="mx-tabs"></div>
+
+  <div class="mx-sec">Training volume, last 30 days</div>
+  <div class="mx-card" id="mx-vol"></div>
+
+  <div class="mx-sec">Story ready</div>
+  <div id="mx-stories"></div>
+  <div class="pg-sub" style="margin-top:14px">Lines appear here once the numbers cross a few thresholds. Copy one straight into a post.</div>
+</div>
+<div class="mx-err" id="mx-err" hidden></div>
+
+<script>
+const TAB_NAMES = { home: 'Home', train: 'Train', pack: 'Pack', intel: 'Intel', notes: 'Notes', guide: 'Guide' };
+function bars(el, xel, rows, days) {
+  const map = {};
+  rows.forEach((r) => { map[r.day] = r.n; });
+  const out = [];
+  const labels = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+    out.push(map[d] || 0);
+    labels.push(d.slice(5));
+  }
+  const max = Math.max(1, ...out);
+  el.innerHTML = out.map((n) => '<div class="mx-bar' + (n ? '' : ' dim') + '" style="height:' + Math.max(3, Math.round((n / max) * 100)) + 'px" title="' + n + '"></div>').join('');
+  if (xel) xel.textContent = labels[0] + ' to ' + labels[labels.length - 1];
+}
+function copyLine(btn, text) {
+  navigator.clipboard.writeText(text).then(() => { btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); });
+}
+(async () => {
+  let m;
+  try {
+    const r = await fetch('/api/metrics');
+    if (r.status === 401) throw new Error('Sign in to the app first, then open this page again.');
+    if (r.status === 403) throw new Error('Not authorized. Set ADMIN_EMAILS in the Vercel env vars to your Google email and redeploy.');
+    if (!r.ok) throw new Error('Could not load metrics.');
+    m = await r.json();
+  } catch (e) {
+    document.getElementById('mx-err').hidden = false;
+    document.getElementById('mx-err').textContent = e.message;
+    return;
+  }
+  document.getElementById('mx').hidden = false;
+  document.getElementById('mx-updated').textContent = 'Updated ' + new Date(m.updated_at).toLocaleString();
+  const cards = [
+    [m.users.total, 'Total hikers'],
+    [m.users.new_7d, 'New this week'],
+    [m.active.d7, 'Active this week'],
+    [m.sessions_30d.count, 'Sessions, 30 days'],
+  ];
+  document.getElementById('mx-cards').innerHTML = cards.map((c) =>
+    '<div class="mx-card"><div class="mx-num">' + c[0] + '</div><div class="mx-lab">' + c[1] + '</div></div>').join('');
+  const f = m.funnel;
+  document.getElementById('mx-funnel').innerHTML =
+    '<div class="mx-step"><div class="n">' + m.users.total + '</div><div class="l">Signed up</div></div>' +
+    '<div class="mx-step"><div class="n">' + f.quiz_users + '</div><div class="p">' + f.quiz_pct + '%</div><div class="l">Finished quiz</div></div>' +
+    '<div class="mx-step"><div class="n">' + f.session_users + '</div><div class="p">' + f.session_pct + '%</div><div class="l">Logged a session</div></div>';
+  bars(document.getElementById('mx-signups'), document.getElementById('mx-signups-x'), m.signups_by_day, 30);
+  bars(document.getElementById('mx-signins'), null, m.signins_by_day, 14);
+  const tabs = m.tab_views_30d;
+  document.getElementById('mx-tabs').innerHTML = tabs.length
+    ? tabs.map((t) => '<div class="mx-row"><span>' + (TAB_NAMES[t.tab] || t.tab) + '</span><b>' + t.n + '</b></div>').join('')
+    : '<div class="pg-sub">No tab data yet. Counts from this deploy onward.</div>';
+  const v = m.sessions_30d;
+  document.getElementById('mx-vol').innerHTML =
+    '<div class="mx-row"><span>Sessions</span><b>' + v.count + '</b></div>' +
+    '<div class="mx-row"><span>Minutes trained</span><b>' + v.minutes + '</b></div>' +
+    '<div class="mx-row"><span>Miles</span><b>' + v.miles + '</b></div>' +
+    '<div class="mx-row"><span>Crews created</span><b>' + m.crews.created + '</b></div>' +
+    '<div class="mx-row"><span>Hikers in crews</span><b>' + m.crews.hikers + '</b></div>' +
+    '<div class="mx-row"><span>Pack items</span><b>' + m.pack_items + '</b></div>';
+  const stories = m.story_lines || [];
+  window.MX_STORIES = stories;
+  document.getElementById('mx-stories').innerHTML = stories.length
+    ? stories.map((s, i) => '<div class="mx-story"><span>' + s + '</span><button class="btn btn-sm" style="width:auto" data-i="' + i + '" onclick="copyLine(this, window.MX_STORIES[+this.dataset.i])">Copy</button></div>').join('')
+    : '<div class="pg-sub">Nothing yet. Check back after a few days of traffic.</div>';
+})();
+</script>
+</body>
+</html>

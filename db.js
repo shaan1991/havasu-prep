@@ -105,6 +105,16 @@ CREATE TABLE IF NOT EXISTS notes (
   updated_at TEXT NOT NULL,
   FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+CREATE TABLE IF NOT EXISTS app_events (
+  id INTEGER PRIMARY KEY,
+  user_id INTEGER,
+  event TEXT NOT NULL,
+  meta TEXT DEFAULT '',
+  created_at TEXT NOT NULL,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_events_event_time ON app_events(event, created_at);
+CREATE INDEX IF NOT EXISTS idx_events_user_time ON app_events(user_id, created_at);
 `;
 
 const PG_SCHEMA = `
@@ -198,6 +208,16 @@ CREATE TABLE IF NOT EXISTS notes (
   updated_at TEXT NOT NULL,
   FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+CREATE TABLE IF NOT EXISTS app_events (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER,
+  event TEXT NOT NULL,
+  meta TEXT DEFAULT '',
+  created_at TEXT NOT NULL,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_events_event_time ON app_events(event, created_at);
+CREATE INDEX IF NOT EXISTS idx_events_user_time ON app_events(user_id, created_at);
 `;
 
 let sqliteDb = null;
@@ -329,4 +349,12 @@ function verifyToken(tok) {
   } catch (e) { return null; }
 }
 
-module.exports = { initDb, get, all, run, now, findOrCreateUser, getProfile, saveProfile, signToken, verifyToken };
+/* product analytics: never throws, never blocks the caller */
+async function logEvent(userId, event, meta) {
+  try {
+    await run('INSERT INTO app_events (user_id, event, meta, created_at) VALUES (?,?,?,?)',
+      [userId || null, String(event).slice(0, 40), String(meta == null ? '' : meta).slice(0, 200), now()]);
+  } catch (e) { console.warn('logEvent failed:', e.message); }
+}
+
+module.exports = { initDb, get, all, run, now, findOrCreateUser, getProfile, saveProfile, signToken, verifyToken, logEvent };

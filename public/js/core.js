@@ -163,6 +163,10 @@ const RENDER = {}; // filled by feature scripts
 function go(tab, arg) {
   if (!RENDER[tab]) tab = 'home';
   S.tab = tab;
+  if (go._last !== tab) {
+    go._last = tab;
+    try { fetch('/api/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: 'tab_view', meta: tab }) }).catch(() => {}); } catch (e) {}
+  }
   $$('#rail .rail-item, #tabbar .tab-item, #menu-pop .mob-mi').forEach((el) => {
     el.classList.toggle('active', el.dataset.tab === tab);
   });

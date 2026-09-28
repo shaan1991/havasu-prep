@@ -5,6 +5,8 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const path = require('node:path');
 const { initDb, get, all, run, now, findOrCreateUser, getProfile, saveProfile, signToken, verifyToken } = require('./db');
+const { logEvent } = require('./db');
+const { computeMetrics, digestMetrics, storyLines } = require('./metrics');
 const { LEVELS, buildPlan, scoreQuiz, weeksUntil, INJURY_NOTES, PACK_TEMPLATE } = require('./plan');
 
 const PORT = process.env.PORT || 3200;
@@ -45,6 +47,7 @@ async function issueAndGo(req, res, profile) {
   const email = profile.emails && profile.emails[0] && profile.emails[0].value;
   const avatar = profile.photos && profile.photos[0] && profile.photos[0].value;
   const user = await findOrCreateUser(profile.id, name, email, avatar);
+  logEvent(user.id, 'signin');
   const token = signToken(user.id);
   res.cookie(COOKIE_NAME, token, cookieOpts(req));
   res.redirect('/app.html');
@@ -84,7 +87,9 @@ if (DEV_LOGIN) {
   }));
   app.get('/auth/dev', ah(async (req, res) => {
     const user = await findOrCreateUser('dev-local', 'Test Hiker', 'test@example.com', null);
-    await issueAndGo(req, res, user);
+    logEvent(user.id, 'signin');
+    res.cookie(COOKIE_NAME, signToken(user.id), cookieOpts(req));
+    res.redirect('/app.html');
   }));
 }
 
@@ -101,6 +106,28 @@ const apiAuth = ah(async (req, res, next) => {
 
 const api = express.Router();
 api.use(apiAuth);
+
+/* client event beacon: whitelisted events only, used for tab view counts */
+const BEACON_EVENTS = { tab_view: 1 };
+api.post('/events', ah(async (req, res) => {
+  const ev = String((req.body && req.body.event) || '');
+  if (!BEACON_EVENTS[ev]) return res.status(400).json({ error: 'Unknown event' });
+  logEvent(req.user.id, ev, req.body.meta);
+  res.json({ ok: true });
+}));
+
+/* private metrics dashboard: admin emails only (ADMIN_EMAILS env, comma separated) */
+const ADMIN_EMAILS = String(process.env.ADMIN_EMAILS || '').split(',').map((x) => x.trim().toLowerCase()).filter(Boolean);
+function isAdmin(user) {
+  return !!(user && user.email && ADMIN_EMAILS.includes(String(user.email).toLowerCase()));
+}
+api.get('/metrics', ah(async (req, res) => {
+  if (!ADMIN_EMAILS.length) return res.status(403).json({ error: 'Metrics are not configured yet (ADMIN_EMAILS)' });
+  if (!isAdmin(req.user)) return res.status(403).json({ error: 'Not authorized' });
+  const m = await computeMetrics({ get, all });
+  m.story_lines = storyLines(m);
+  res.json(m);
+}));
 
 /* me */
 api.get('/me', ah(async (req, res) => {
@@ -141,6 +168,7 @@ api.post('/quiz', ah(async (req, res) => {
     plan_started: now(),
   });
   await seedPack(req.user.id);
+  logEvent(req.user.id, 'quiz_completed', level);
   res.json({ level: LEVELS[level], weeks, injury, profile, plan: buildPlan(level, weeks) });
 }));
 api.get('/plan', ah(async (req, res) => {
@@ -380,6 +408,7 @@ api.post('/crews', ah(async (req, res) => {
   for (let i = 0; i < 8 && await get('SELECT 1 FROM crews WHERE id = ?', [code]); i++) code = crewCode();
   await run('INSERT INTO crews (id, name, owner_id, created_at) VALUES (?,?,?,?)', [code, name, req.user.id, now()]);
   await run('INSERT INTO crew_members (crew_id, user_id, display_name, joined_at) VALUES (?,?,?,?)', [code, req.user.id, req.user.name, now()]);
+  logEvent(req.user.id, 'crew_created');
   res.json({ id: code, name, code });
 }));
 api.post('/crews/join', ah(async (req, res) => {
@@ -391,6 +420,7 @@ api.post('/crews/join', ah(async (req, res) => {
   const count = (await get('SELECT COUNT(*) c FROM crew_members WHERE crew_id = ?', [code])).c;
   if (count >= CREW_MAX) return res.status(400).json({ error: 'This crew is full (12 max, the tribe limit)' });
   await run('INSERT INTO crew_members (crew_id, user_id, display_name, joined_at) VALUES (?,?,?,?)', [code, req.user.id, req.user.name, now()]);
+  logEvent(req.user.id, 'crew_joined', code);
   res.json({ id: code, name: crew.name, code });
 }));
 api.get('/crews', ah(async (req, res) => {
@@ -448,6 +478,7 @@ api.post('/training/log', ah(async (req, res) => {
     VALUES (?,?,?,?,?,?,?,?,?,?)`, [req.user.id, b.log_date || new Date().toISOString().slice(0, 10),
     b.week_index || null, b.day_index == null ? null : +b.day_index, b.kind, String(b.title).slice(0, 120),
     Math.max(0, +b.minutes || 0), Math.max(0, +b.distance_mi || 0), String(b.notes || '').slice(0, 500), now()]);
+  logEvent(req.user.id, 'session_logged', b.kind);
   res.json({ id: r.lastInsertRowid });
 }));
 api.delete('/training/log/:id', ah(async (req, res) => {
@@ -555,6 +586,13 @@ api.delete('/notes/:id', ah(async (req, res) => {
 
 /* public config for the landing page (no auth needed) */
 app.get('/api/config', (req, res) => res.json({ devLogin: DEV_LOGIN, googleOn }));
+/* weekly metrics digest for the Monday ping: aggregate numbers only, no PII */
+app.get('/api/metrics/digest', ah(async (req, res) => {
+  const key = process.env.METRICS_KEY || '';
+  if (!key || req.query.key !== key) return res.status(403).json({ error: 'Not authorized' });
+  res.json(digestMetrics(await computeMetrics({ get, all })));
+}));
+
 app.use('/api', api);
 
 /* ── static ─────────────────────────────────────────────── */
