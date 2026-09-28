@@ -60,188 +60,71 @@ const SHOTS = [
    plus one CC BY SA Flickr image. Credits shown in the lightbox. */
 /* Ordered to match the SHOTS array above: one entry per location. */
 const SHOT_IMGS = [
- [
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-04-hav-eric-9561.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-04-hav-eric-9561.jpg?width=1280",
-   "cap": "Hikers on the trail at golden hour",
-   "credit": "© Robertbody at English Wikipedia · CC BY 3.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-22-hav-hua-4987.JPG?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-22-hav-hua-4987.JPG?width=1280",
-   "cap": "The switchbacks from above",
-   "credit": "© Robertbody at English Wikipedia · CC BY 3.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/2014%2C%20Intrepid%20Hikers%20on%20the%20Trail%20-%20panoramio.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/2014%2C%20Intrepid%20Hikers%20on%20the%20Trail%20-%20panoramio.jpg?width=1280",
-   "cap": "The long walk in",
-   "credit": "© Chris English · CC BY SA 3.0 · Wikimedia Commons"
-  }
+ [ /* Hualapai Hilltop */
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-22-hav-hua-4987.JPG?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-22-hav-hua-4987.JPG?width=1280', cap: 'The switchbacks from above', credit: '\u00a9 Robertbody at English Wikipedia \u00b7 CC BY 3.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/2014%2C%20Intrepid%20Hikers%20on%20the%20Trail%20-%20panoramio.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/2014%2C%20Intrepid%20Hikers%20on%20the%20Trail%20-%20panoramio.jpg?width=1280', cap: 'The long walk in', credit: '\u00a9 Chris English \u00b7 CC BY SA 3.0 \u00b7 Wikimedia Commons' }
  ],
- [
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Lower%20rock%20falls.JPG?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Lower%20rock%20falls.JPG?width=1280",
-   "cap": "Wide on the cascades",
-   "credit": "© Gonzo fan2007 · CC BY SA 3.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Dry%20navajo%20falls.JPG?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Dry%20navajo%20falls.JPG?width=1280",
-   "cap": "Travertine detail",
-   "credit": "© Gonzo fan2007 · CC BY SA 3.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Navajo%20Falls%20in%20Cataract%20Canyon%2C%20Grand%20Canyon%2C%20Arizona%2C%201900-1940%20%28CHS-3843%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Navajo%20Falls%20in%20Cataract%20Canyon%2C%20Grand%20Canyon%2C%20Arizona%2C%201900-1940%20%28CHS-3843%29.jpg?width=1280",
-   "cap": "Navajo Falls, circa 1900",
-   "credit": "Public domain · Wikimedia Commons"
-  }
+ [ /* Navajo Falls */
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Lower%20rock%20falls.JPG?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Lower%20rock%20falls.JPG?width=1280', cap: 'Wide on the cascades', credit: '\u00a9 Gonzo fan2007 \u00b7 CC BY SA 3.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://free-images.com/or/49d9/navajo_falls_havasupai_canyon.jpg', src: 'https://free-images.com/or/49d9/navajo_falls_havasupai_canyon.jpg', cap: 'Cascades through the canyon green', credit: '\u00a9 Ranger Robb \u00b7 CC0 Public Domain \u00b7 via Flickr' }
  ],
- [
-  {
-   "thumb": "https://live.staticflickr.com/2446/3961693313_6186bccca9_b.jpg",
-   "src": "https://live.staticflickr.com/2446/3961693313_6186bccca9_b.jpg",
-   "cap": "Fifty Foot Falls up close",
-   "credit": "© rwiedower · CC BY SA 2.0 · Flickr"
-  }
+ [ /* Fifty Foot Falls */
+  { thumb: 'https://live.staticflickr.com/2446/3961693313_6186bccca9_b.jpg', src: 'https://live.staticflickr.com/2446/3961693313_6186bccca9_b.jpg', cap: 'Fifty Foot Falls up close', credit: '\u00a9 rwiedower \u00b7 CC BY SA 2.0 \u00b7 Flickr' }
  ],
- [
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%2C%20Grand%20Canyon.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%2C%20Grand%20Canyon.jpg?width=1280",
-   "cap": "The classic view from above",
-   "credit": "© Traveling Man · CC BY SA 3.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%201%20md%20edit.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%201%20md%20edit.jpg?width=1280",
-   "cap": "Frontal with the pools below",
-   "credit": "© User:Moondigger · CC BY SA 2.5 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20Paradise.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20Paradise.jpg?width=1280",
-   "cap": "Turquoise water in midday sun",
-   "credit": "© Brent Sisson · CC BY SA 4.0 · Wikimedia Commons"
-  }
+ [ /* Havasu Falls */
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%2C%20Grand%20Canyon.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%2C%20Grand%20Canyon.jpg?width=1280', cap: 'The classic view from above', credit: '\u00a9 Traveling Man \u00b7 CC BY SA 3.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20Paradise.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20Paradise.jpg?width=1280', cap: 'Turquoise water in midday sun', credit: '\u00a9 Brent Sisson \u00b7 CC BY SA 4.0 \u00b7 Wikimedia Commons' }
  ],
- [
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/01470%201948%20Grand%20Canyon%20Historic%20Trout%20Stocking%20Trip%20-%20Havasu%20Creek%20%286904870479%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/01470%201948%20Grand%20Canyon%20Historic%20Trout%20Stocking%20Trip%20-%20Havasu%20Creek%20%286904870479%29.jpg?width=1280",
-   "cap": "Silky water over travertine",
-   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/05196%20Grand%20Canyon%20Nat%20Park%20Historic%20River%20Photo%20%287305034038%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/05196%20Grand%20Canyon%20Nat%20Park%20Historic%20River%20Photo%20%287305034038%29.jpg?width=1280",
-   "cap": "Pools between the falls",
-   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/01928%20Grand%20Canyon%20Historic%20Havasu%20Creek%201949%20%286904877181%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/01928%20Grand%20Canyon%20Historic%20Havasu%20Creek%201949%20%286904877181%29.jpg?width=1280",
-   "cap": "Cascade detail in the creek",
-   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
-  }
+ [ /* Travertine pools */
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Turquoise%20Aqua%20Basin%20plus.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Turquoise%20Aqua%20Basin%20plus.jpg?width=1280', cap: 'Turquoise pool with a waterfall', credit: '\u00a9 Brent Sisson \u00b7 CC BY SA 4.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Creek.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Creek.jpg?width=1280', cap: 'Clear pools under the red cliffs', credit: '\u00a9 RebexArt \u00b7 CC BY SA 3.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-20-hav-creek-4021.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/2008-04-20-hav-creek-4021.jpg?width=1280', cap: 'Silky water over travertine', credit: '\u00a9 Robertbody at English Wikipedia \u00b7 CC BY 3.0 \u00b7 Wikimedia Commons' }
  ],
- [
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Arizona%2C%202006.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Arizona%2C%202006.jpg?width=1280",
-   "cap": "From the base, looking up",
-   "credit": "Public domain · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls.jpg?width=1280",
-   "cap": "The full drop, with scale",
-   "credit": "© Riffy Thomas · CC BY SA 4.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Havasu%20Canyon%2C%20Arizona%2C%20ca.1930%20%28CHS-4680%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Havasu%20Canyon%2C%20Arizona%2C%20ca.1930%20%28CHS-4680%29.jpg?width=1280",
-   "cap": "Mooney Falls, circa 1930",
-   "credit": "Public domain · Wikimedia Commons"
-  }
+ [ /* Mooney Falls */
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Waterfall%20from%20the%20Heaven.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Waterfall%20from%20the%20Heaven.jpg?width=1280', cap: 'Framed by the canyon overhang', credit: '\u00a9 Ondippuli \u00b7 CC BY SA 4.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls.jpg?width=1280', cap: 'The full 200 foot drop, with a hiker for scale', credit: '\u00a9 Riffy Thomas \u00b7 CC BY SA 4.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Arizona%2C%202006.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mooney%20Falls%2C%20Arizona%2C%202006.jpg?width=1280', cap: 'From the base, looking up', credit: 'Public domain \u00b7 Wikimedia Commons' }
  ],
- [
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Beaver%20falls.JPG?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Beaver%20falls.JPG?width=1280",
-   "cap": "The terraced cascades",
-   "credit": "© Gonzo fan2007 · CC BY SA 3.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Rope%20Climb%20Beaver%20Falls.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Rope%20Climb%20Beaver%20Falls.jpg?width=1280",
-   "cap": "The rope climb section",
-   "credit": "Public domain · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Grca%2031880%20-%20Havasupai%20-%20Circa%201900%20%286704208915%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Grca%2031880%20-%20Havasupai%20-%20Circa%201900%20%286704208915%29.jpg?width=1280",
-   "cap": "Beaver Falls, circa 1900",
-   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
-  }
+ [ /* Beaver Falls */
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Beaver%20falls.JPG?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Beaver%20falls.JPG?width=1280', cap: 'The terraced cascades', credit: '\u00a9 Gonzo fan2007 \u00b7 CC BY SA 3.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Beaver%20Falls%20GC.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Beaver%20Falls%20GC.jpg?width=1280', cap: 'Turquoise pools below the cascades', credit: '\u00a9 Gonzo fan2007 \u00b7 Public domain \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Rope%20Climb%20Beaver%20Falls.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Rope%20Climb%20Beaver%20Falls.jpg?width=1280', cap: 'The rope climb section', credit: 'Public domain \u00b7 Wikimedia Commons' }
  ],
- [
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200193%20%286094535727%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200193%20%286094535727%29.jpg?width=1280",
-   "cap": "Blue green meets the Colorado",
-   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200184%20%286095079826%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200184%20%286095079826%29.jpg?width=1280",
-   "cap": "Rafts at the meeting point",
-   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/The%20confluence%20of%20Havasu%20Creek%20and%20the%20Colorado%20River.%20Grand%20Canyon%20National%20Park%2C%20Arizona%20%2826357567356%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/The%20confluence%20of%20Havasu%20Creek%20and%20the%20Colorado%20River.%20Grand%20Canyon%20National%20Park%2C%20Arizona%20%2826357567356%29.jpg?width=1280",
-   "cap": "Where the creek meets the river",
-   "credit": "© Paxson Woelber · CC BY 2.0 · Wikimedia Commons"
-  }
+ [ /* The Confluence */
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200193%20%286094535727%29.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200193%20%286094535727%29.jpg?width=1280', cap: 'Blue green meets the Colorado', credit: '\u00a9 Grand Canyon National Park \u00b7 CC BY 2.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200184%20%286095079826%29.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Canyon%20Mouth%20of%20Havasu%20Creek%200184%20%286095079826%29.jpg?width=1280', cap: 'Rafts at the meeting point', credit: '\u00a9 Grand Canyon National Park \u00b7 CC BY 2.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/The%20confluence%20of%20Havasu%20Creek%20and%20the%20Colorado%20River.%20Grand%20Canyon%20National%20Park%2C%20Arizona%20%2826357567356%29.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/The%20confluence%20of%20Havasu%20Creek%20and%20the%20Colorado%20River.%20Grand%20Canyon%20National%20Park%2C%20Arizona%20%2826357567356%29.jpg?width=1280', cap: 'Where the creek meets the river', credit: '\u00a9 Paxson Woelber \u00b7 CC BY 2.0 \u00b7 Wikimedia Commons' }
  ],
- [
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/SupaiVillageFirstSignWigleeva.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/SupaiVillageFirstSignWigleeva.jpg?width=1280",
-   "cap": "The village welcome sign",
-   "credit": "© Elf · CC BY SA 3.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Helicopter%20in%20Supai%20Village%20-%20panoramio.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Helicopter%20in%20Supai%20Village%20-%20panoramio.jpg?width=1280",
-   "cap": "Helicopter pad below the cliffs",
-   "credit": "© Outdoor Craziness · CC BY SA 3.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/01925%20Grand%20Canyon%20Historic%20Supai%20Village%20Irragation%20Ditch%201949%20%286904876421%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/01925%20Grand%20Canyon%20Historic%20Supai%20Village%20Irragation%20Ditch%201949%20%286904876421%29.jpg?width=1280",
-   "cap": "Supai Village, 1949",
-   "credit": "© Grand Canyon National Park · CC BY 2.0 · Wikimedia Commons"
-  }
+ [ /* Supai Village */
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/SupaiVillageFirstSignWigleeva.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/SupaiVillageFirstSignWigleeva.jpg?width=1280', cap: 'The village welcome sign', credit: '\u00a9 Elf \u00b7 CC BY SA 3.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Helicopter%20in%20Supai%20Village%20-%20panoramio.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Helicopter%20in%20Supai%20Village%20-%20panoramio.jpg?width=1280', cap: 'Helicopter pad below the cliffs', credit: '\u00a9 Outdoor Craziness \u00b7 CC BY SA 3.0 \u00b7 Wikimedia Commons' }
  ],
- [
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20at%20Night.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20at%20Night.jpg?width=1280",
-   "cap": "Havasu Falls under the stars",
-   "credit": "© Jeremy Evans · CC BY SA 2.0 · Wikimedia Commons"
-  },
-  {
-   "thumb": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasupai%20at%20Night%20%28Unsplash%29.jpg?width=480",
-   "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Havasupai%20at%20Night%20%28Unsplash%29.jpg?width=1280",
-   "cap": "Mooney Falls at night",
-   "credit": "© Jeremy Bishop tidesinourveins · CC0 · Wikimedia Commons"
-  }
+ [ /* Night sky */
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20at%20Night.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasu%20Falls%20at%20Night.jpg?width=1280', cap: 'Havasu Falls under the stars', credit: '\u00a9 Jeremy Evans \u00b7 CC BY SA 2.0 \u00b7 Wikimedia Commons' },
+  { thumb: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasupai%20at%20Night%20%28Unsplash%29.jpg?width=480', src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Havasupai%20at%20Night%20%28Unsplash%29.jpg?width=1280', cap: 'Mooney Falls at night', credit: '\u00a9 Jeremy Bishop tidesinourveins \u00b7 CC0 \u00b7 Wikimedia Commons' }
  ]
+];
+
+/* Hand picked video guides: verified live on YouTube, thumbnails lazy loaded, tap to play inline. */
+const YT_VIDEOS = [
+ { id: 'K3iDWxQlUlQ', title: "The Havasupai Falls Hike: From the Permits to Havasu Falls", channel: "Jared Dillingham (Jared's Detours)", dur: '~5 min', why: 'A tight five minute trail briefing from a hiker who has done it before, covering permits, the switchbacks, water stops, and what the village is actually like, so you know the whole route before your boots touch it.' },
+ { id: 'A5q-hpGNVgw', title: "I've Never Seen Water This Color in My Life | Havasupai 2026", channel: 'US Travelers', dur: '~10 min', why: 'The freshest logistics walkthrough of the bunch, filmed in 2026, with current permit costs, the Grand Canyon Caverns Inn check in process, and a mile by mile feel for the hike in.' },
+ { id: 'VSSrJKQ-BLg', title: "A BEGINNER'S Guide to Havasupai | Havasu Falls | Mooney Falls", channel: 'Sojourn Expedition', dur: '~12 min', why: 'Built for first timers, with clear chapters on permits, packing, and camp life, the closest thing here to a things I wish I knew briefing from people who run guided trips.' },
+ { id: '-K783O4D7Zk', title: 'Havasupai Falls Packing Info and Gear List', channel: 'Kurtis Lowe', dur: '', why: "A real backpacker's full loadout walkthrough, not a sponsored gear ad, with plain talk about what was worth the weight and what was not, plus a rain tip that could save your sleeping bag." },
+ { id: 'EM7oeFfpMXA', title: "Mooney Falls: The Descent Down Havasupai's Biggest Waterfall", channel: "Jared Dillingham (Jared's Detours)", dur: '~3 min', why: 'Three minutes of pure respect for the chains and ladders descent, filmed on the route itself, with honest warnings about the slippery sections and the undertow waiting at the bottom.' },
+ { id: 'H4PGQPkUoXw', title: 'Hiking To The Confluence | Where Havasu Creek Meets the Colorado River', channel: 'Inspire To Go', dur: '~11 min', why: 'All nine river crossings filmed in order, ending where the turquoise creek meets the Colorado, plus an honest things to consider section on whether the 16 mile day is right for you.' },
+ { id: 'Y88qnENtlMs', title: 'Walking tour of Havasupai Campground | Recommendations for best campsites', channel: 'CrimsonBlaze', dur: '~35 min', why: 'A slow walk of the entire campground on both sides of the creek, showing pit toilets, Fern Spring, and which sites are actually worth claiming early.' },
+ { id: 'qoBQUj03MAg', title: "ARIZONA'S BEST WATERFALLS \uD83D\uDCA6 ULTIMATE GUIDE TO HIKING HAVASUPAI FALLS (PART 1)", channel: 'Project RV: Living Lost', dur: '', why: 'The safety pick: start early to beat the heat, carry at least 3 liters per person, and real talk on the Mooney descent and why you should never count on the helicopter.' }
+];
+
+/* Instagram reels from hikers on the trail, verified 2026. */
+const REELS = [
+ { url: 'https://www.instagram.com/reel/DYFcRBevpjf', creator: '@ry.roams', note: 'Pack list plus the numbers that matter: $455 permits, December registration, first come first serve campground, and why you start before sunrise.' },
+ { url: 'https://www.instagram.com/reel/DYPkOq8SZ7w', creator: '@thetrailvibe', note: 'Pack list with real weights, about 30 lbs, plus sandals for the creek crossings and a separate daypack.' },
+ { url: 'https://www.instagram.com/reel/DZeOc3siCBk', creator: '@capthevoyager', note: 'Mooney chains and ladders safety tips from someone who just climbed them.' },
+ { url: 'https://www.instagram.com/reel/Ddsb92to9DH', creator: '@marie_being', note: 'POV of the full Mooney descent. Watch this before you commit to the chains.' },
+ { url: 'https://www.instagram.com/reel/DZ8GheoxkdD', creator: '@grandcanyon.posse', note: 'A day by day plan for a 4 day trip, a good template for your itinerary.' },
+ { url: 'https://www.instagram.com/reel/DV3g-YsON5E', creator: '@funsizewanderer', note: 'Vegas logistics that match a fly in, drive out routing.' }
 ];
 
 /* Key locations: one tap directions. Queries are place names, no coordinates
@@ -346,6 +229,22 @@ RENDER.intel = async function () {
         '<div class="t2">' + esc(n.source || 'News') + (n.published ? ' · ' + esc(timeAgo(n.published)) : '') + '</div></div>' +
         '<span class="news-go">↗</span></a>').join('');
 
+
+  const ytHtml = YT_VIDEOS.map((v) =>
+    '<button class="yt-card" data-yt="' + esc(v.id) + '" aria-label="Play video: ' + esc(v.title) + '">' +
+    '<span class="yt-thumb"><img loading="lazy" src="https://i.ytimg.com/vi/' + esc(v.id) + '/hqdefault.jpg" alt="' + esc(v.title) + '">' +
+    '<span class="yt-play"><span>\u25B6</span></span></span>' +
+    '<span class="yt-body"><span class="yt-t1">' + esc(v.title) + '</span>' +
+    '<span class="yt-t2">' + esc(v.channel) + (v.dur ? ' \u00b7 ' + esc(v.dur) : '') + '</span>' +
+    '<span class="yt-why">' + esc(v.why) + '</span></span></button>').join('');
+  const reelsHtml = REELS.map((r) =>
+    '<a class="reel-row" href="' + esc(r.url) + '" target="_blank" rel="noopener"><div class="grow">' +
+    '<div class="t1">' + esc(r.creator) + '</div>' +
+    '<div class="t2">' + esc(r.note) + '</div></div>' +
+    '<span class="news-go">\u2197</span></a>').join('');
+  const watchHtml = '<div class="watch-label">YouTube guides</div><div class="yt-grid">' + ytHtml + '</div>' +
+    '<div class="watch-label">Reels from the trail</div>' + reelsHtml;
+
   function shotPins() {
     try { return JSON.parse(localStorage.getItem('havasu_shotpins') || '{}'); }
     catch (e) { return {}; }
@@ -382,6 +281,10 @@ RENDER.intel = async function () {
     '<div class="pg-title" style="font-size:26px">Film it like you mean it.</div>' +
     '<div class="pg-sub">Location by location ideas with reference photos. Tap any photo to view it large, pin the ones you want to chase.</div></div>' +
     colSection('sh', 'Shot list', SHOTS.length + ' locations', '<div class="stagger">' + shotsHtml + '</div>') +
+    '<div class="pg-hd" style="margin-top:26px"><div class="pg-eyebrow">Learn</div>' +
+    '<div class="pg-title" style="font-size:26px">Watch and learn.</div>' +
+    '<div class="pg-sub">Hand picked videos and reels from people who have hiked it. Tap a video to play it right here.</div></div>' +
+    colSection('wl', 'Watch and learn', YT_VIDEOS.length + ' videos \u00b7 ' + REELS.length + ' reels', watchHtml) +
     '<div class="shotbox" id="shotbox" hidden><div class="shotbox-back" id="shotbox-back"></div>' +
     '<div class="shotbox-main"><button class="shotbox-x" id="shotbox-x" aria-label="Close">\u00d7</button>' +
     '<button class="shotbox-nav prev" id="shotbox-prev" aria-label="Previous photo">\u2039</button>' +
@@ -408,6 +311,17 @@ RENDER.intel_mount = function () {
   });
 
   /* Shot list lightbox */
+  /* Tap a video card to play it inline */
+  $$('.yt-card').forEach((c) => {
+    c.onclick = () => {
+      const id = c.dataset.yt;
+      const th = c.querySelector('.yt-thumb');
+      if (th) th.outerHTML = '<span class="yt-frame"><iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) +
+        '?autoplay=1&rel=0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></span>';
+      c.onclick = null;
+    };
+  });
+
   const box = $('#shotbox');
   if (box) {
     let bCard = 0, bIdx = 0;
