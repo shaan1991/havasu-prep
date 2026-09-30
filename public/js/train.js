@@ -18,7 +18,8 @@ RENDER.train = async function (weekArg) {
   try { ready = await api('/api/readiness'); } catch (e) { /* readiness unavailable */ }
   const crewHtml = buildCrewCard(crews);
   const readyHtml = buildReadinessCard(ready);
-  const pct = d.days.length ? Math.round(d.days.filter((x) => x.kind === 'rest' || x.logs.length > 0).length / d.days.length * 100) : 0;
+  const doneDays = d.days.filter((x) => x.kind === 'rest' || x.logs.length > 0).length;
+  const pct = d.days.length ? Math.min(100, Math.round((doneDays + (d.extras || 0)) / d.days.length * 100)) : 0;
   const cards = d.days.map((day, i) => {
     const done = day.logs.length > 0;
     const target = day.target_mi > 0 ? day.target_mi + ' mi' : day.target_min > 0 ? day.target_min + ' min' : '';
@@ -26,7 +27,8 @@ RENDER.train = async function (weekArg) {
       '<div class="log-row">' + IC.check.replace('<svg', '<svg width="14" height="14"') + ' <b>' + esc(l.title) + '</b> ' +
       (l.distance_mi > 0 ? esc(String(l.distance_mi)) + ' mi · ' : '') + (l.minutes > 0 ? esc(String(l.minutes)) + ' min' : '') +
       '<button class="x icon-btn" data-del-log="' + l.id + '" title="Delete">' + IC.x + '</button></div>').join('');
-    return '<div class="day-card" data-log-day="' + i + '" data-day-kind="' + day.kind + '" style="cursor:pointer">' +
+    const isRest = day.kind === 'rest';
+    return '<div class="day-card"' + (isRest ? '' : ' data-log-day="' + i + '" style="cursor:pointer"') + ' data-day-kind="' + day.kind + '">' +
       '<div class="day-ic' + (done ? ' done' : day.kind === 'rest' ? ' rest' : '') + '">' + IC[KIND_ICON[day.kind] || 'activity'] + '</div>' +
       '<div class="day-meta"><div class="day-name">' + esc(day.day) + ' · ' + esc(day.title) + '</div>' +
       '<div class="day-detail">' + esc(day.detail) + '</div>' +

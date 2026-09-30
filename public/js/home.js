@@ -68,10 +68,13 @@ RENDER.home_mount = function () {
     $('#hm-save', m).onclick = async () => {
       try {
         const v = $('#hm-date', m).value || null;
-        await api('/api/me', { method: 'PUT', body: { trip_date: v } });
+        const oldWeeks = S.profile && S.profile.weeks;
+        const d = await api('/api/me', { method: 'PUT', body: { trip_date: v } });
         await refreshMe();
         closeModal(true);
-        toast('Trip date saved');
+        toast(d.profile && d.profile.weeks && d.profile.weeks !== oldWeeks
+          ? 'Trip date saved, plan rebuilt for ' + d.profile.weeks + ' weeks'
+          : 'Trip date saved');
         go('home');
       } catch (e) { toast(e.message); }
     };

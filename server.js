@@ -140,6 +140,14 @@ api.put('/me', ah(async (req, res) => {
   if (trip_date !== undefined) patch.trip_date = trip_date || null;
   if (theme === 'dark' || theme === 'light') patch.theme = theme;
   if (click_sounds === 0 || click_sounds === 1) patch.click_sounds = click_sounds;
+  if (trip_date !== undefined) {
+    const cur = await getProfile(req.user.id);
+    if (cur && cur.level) {
+      let weeks = weeksUntil(trip_date || null);
+      if (weeks == null || weeks < 2) weeks = LEVELS[cur.level].weeks_default;
+      patch.weeks = Math.max(2, Math.min(12, weeks));
+    }
+  }
   const profile = await saveProfile(req.user.id, patch);
   res.json({ user: await get('SELECT id, name, email, avatar, created_at FROM users WHERE id = ?', [req.user.id]), profile });
 }));
@@ -469,7 +477,7 @@ api.get('/training/week', ah(async (req, res) => {
   const logs = await all('SELECT * FROM training_logs WHERE user_id = ? AND week_index = ?', [req.user.id, w]);
   const byDay = {};
   for (const l of logs) { (byDay[l.day_index] = byDay[l.day_index] || []).push(l); }
-  res.json({ week: w, total: plan.weeks.length, level: LEVELS[p.level], days: wk.days.map((d, i) => ({ ...d, logs: byDay[i] || [] })) });
+  res.json({ week: w, total: plan.weeks.length, level: LEVELS[p.level], extras: logs.filter((l) => l.day_index == null).length, days: wk.days.map((d, i) => ({ ...d, logs: byDay[i] || [] })) });
 }));
 api.post('/training/log', ah(async (req, res) => {
   const b = req.body || {};
@@ -510,7 +518,8 @@ api.get('/stats', ah(async (req, res) => {
     const restDays = wk.days.filter(x => x.kind === 'rest').length;
     weekTotal = wk.days.length;
     const logs = await all('SELECT DISTINCT day_index FROM training_logs WHERE user_id = ? AND week_index = ? AND day_index IS NOT NULL', [req.user.id, weekNum]);
-    weekDone = Math.min(weekTotal, restDays + logs.length);
+    const extras = await get('SELECT COUNT(*) c FROM training_logs WHERE user_id = ? AND week_index = ? AND day_index IS NULL', [req.user.id, weekNum]);
+    weekDone = Math.min(weekTotal, restDays + logs.length + (extras ? extras.c : 0));
   }
   res.json({
     streak,
